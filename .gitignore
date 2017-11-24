@@ -1,0 +1,12 @@
+*.o
+Makefile*
+moc_*
+*.user
+*.stash
+Debug
+Release
+*.a
+*.log
+*.dat
+morenos_imitator
+morenos_gui
