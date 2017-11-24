@@ -3,6 +3,10 @@ CONFIG += c++14 staticlib
 
 LIBS = -lpcap
 
+MOC_DIR = ../build
+OBJECTS_DIR = ../build
+DESTDIR = ../libs
+
 HEADERS += \
     Tests.h \
     PacketManager.h \

@@ -4,6 +4,10 @@ CONFIG += c++14 staticlib
 
 INCLUDEPATH += ../Data_Models/
 
+MOC_DIR = ../../build
+OBJECTS_DIR = ../../build
+DESTDIR = ../../libs
+
 SOURCES += \
     DescriptionWidget.cpp \
     TargetsTable.cpp

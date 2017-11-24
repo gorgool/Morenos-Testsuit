@@ -5,8 +5,12 @@ CONFIG += c++14
 
 INCLUDEPATH += ComposerWidget/ Data_Models/ PlotPositionWidget/ PortraitPlaneWidget/ TargetTableWidget/ ../Packet_Manager/
 
-QMAKE_LIBDIR = ComposerWidget Data_Models PlotPositionWidget PortraitPlaneWidget TargetTableWidget ../Packet_Manager
+QMAKE_LIBDIR = ../libs/
 LIBS = -lComposer -lData_Models -lPlotPosition -lPortraitPlane -lTargetTable -lPacket_Manager -lpcap
+
+MOC_DIR = ../../build
+OBJECTS_DIR = ../../build
+DESTDIR = ../bin
 
 HEADERS += \
   GUI_Elements.h \
