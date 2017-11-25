@@ -126,15 +126,15 @@ bool validate(const PlotDescription & msg)
 {
   try
   {
-	check_value("referance time", msg.referance_time, [](auto& val) { return val <= std::pow(2, 40); });
-    check_value("channel id", msg.channel_id, [](auto& val) { return val > 0 && val < 9 ; });
-    check_value("start of the frequency range", msg.freq_range_start, [](auto& val) { return val >= 0.0 && val <= 115.0; });
-    check_value("width of the frequency range", msg.freq_range_width, [](auto& val) { return val >= 0.0 && val < 115.0; });
-    check_value("logarithm of power ", msg.power, [](auto& val) { return val >= 0 && val <= (std::pow(2, 15) - 1); });
-    check_value("referance time", msg.referance_time, [](auto& val) { return val >= 0 && val <= (std::pow(2, 40) - 1); });
-    check_value("u angle", msg.u, [](auto& val) { return val >= -1.0 && val <= 1.0; });
-    check_value("v angle", msg.v, [](auto& val) { return val >= -1.0 && val <= 1.0; });
-    check_value("variance", msg.variance, [](auto& val) { return val >= 0.0 && val <= 1.0; });
+	check_value("Referance time", msg.referance_time, [](auto& val) { return val <= std::pow(2, 40); });
+    check_value("Channel id", msg.channel_id, [](auto& val) { return val > 0 && val < 9 ; });
+    check_value("Start of the frequency range", msg.freq_range_start, [](auto& val) { return val >= 0.0 && val <= 115.0; });
+    check_value("Width of the frequency range", msg.freq_range_width, [](auto& val) { return val >= 0.0 && val < 115.0; });
+    check_value("Logarithm of power ", msg.power, [](auto& val) { return val >= 0 && val <= (std::pow(2, 15) - 1); });
+    check_value("Referance time", msg.referance_time, [](auto& val) { return val >= 0 && val <= (std::pow(2, 40) - 1); });
+    check_value("U angle", msg.u, [](auto& val) { return val >= -1.0 && val <= 1.0; });
+    check_value("V angle", msg.v, [](auto& val) { return val >= -1.0 && val <= 1.0; });
+    check_value("Variance", msg.variance, [](auto& val) { return val >= 0.0 && val <= 1.0; });
    
     return true;
   }
@@ -261,12 +261,10 @@ bool validate(const SearchResult_Msg & msg)
 {
   try
   {
-	check_value("transfer time", msg.transfer_time, [](auto& val) { return val <= std::pow(2, 40); });
-	check_value("process time", msg.process_time, [](auto& val) { return val <= std::pow(2, 40); });
-    check_value("transfer time", msg.transfer_time, [](auto& val) { return val >= 0 && val <= (std::pow(2, 40) - 1); });
-    check_value("process time", msg.process_time, [](auto& val) { return val >= 0 && val <= (std::pow(2, 40) - 1); });
-    check_value("polarization type", msg.polarization_type, [](auto& val) { return val == 0 || val == 1; });
-    check_value("signal gain", msg.signal_amp, [](auto& val) 
+	  check_value("Transfer time", msg.transfer_time, [](auto& val) { return val <= std::pow(2, 40); });
+	  check_value("Process time", msg.process_time, [](auto& val) { return val <= std::pow(2, 40); });
+    check_value("Polarization type", msg.polarization_type, [](auto& val) { return val == 0 || val == 1; });
+    check_value("Signal gain", msg.signal_amp, [](auto& val) 
     { 
       for (auto g : val)
       {
@@ -275,8 +273,8 @@ bool validate(const SearchResult_Msg & msg)
       }
       return true; 
     });
-    check_value("number of plots", msg.plots_count, [&](auto& val) { return val == msg.p.size(); });
-    check_value("plots", msg.p, [](auto& val) 
+    check_value("Number of plots", msg.plots_count, [&](auto& val) { return val == msg.p.size(); });
+    check_value("Plots", msg.p, [](auto& val) 
     { 
       for (auto& plot : val)
       {
