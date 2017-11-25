@@ -16,16 +16,16 @@ class ConfigManager
 {
 
   /** @brief Loaded JSON configuration. */
-  rapidjson::Document _json_config;
+  rapidjson::Document json_config_;
 
   /** @brief Name of the configuration. */
-  std::string _config_name;
+  std::string config_name_;
 
   /** @brief Pathname of the directory with configuration files. */
-  boost::filesystem::path _path;
+  boost::filesystem::path path_;
 
   /** @brief true if configuration loaded. */
-  bool _config_loaded = false;
+  bool config_loaded_ = false;
 
 
 public:
@@ -249,7 +249,7 @@ void ConfigManager::set_array(Object object, const std::vector<ArrayType>& arr)
     obj.Clear();
     for (auto& item : arr)
     {
-      obj.PushBack(item, _json_config.GetAllocator());
+      obj.PushBack(item, json_config_.GetAllocator());
     }
   }
   else
