@@ -32,7 +32,7 @@ struct Target
     int search_area_id;
     double sigma;
     int channel_id;
-    std::uint16_t power;
+    double power;
     double freq_start;
     double freq_width;
 

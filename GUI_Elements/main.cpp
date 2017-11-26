@@ -3,11 +3,13 @@
 #include <thread>
 #include <chrono>
 #include <mutex>
+#include <iostream>
 
 #include "Composer.h"
 #include "PacketManager.h"
 #include "GUI_Elements.h"
 #include "TargetsModelAdapter.h"
+#include "ConfigManager.hpp"
 
 int main(int argc, char* argv[])
 {
@@ -17,10 +19,26 @@ int main(int argc, char* argv[])
     AntennaParamsModel* antenna_model = new AntennaParamsModel;
     TargetsModelAdapter* targets_model = new TargetsModelAdapter;
 
-    antenna_model->updateGridParams(0.4, 0.6, 0.02, 20000.0, 300000.0, 50000.0);
+    antenna_model->updateGridParams(0.5, 0.5, 0.02, 10000.0, 1.5e6, 1.5e5);
     antenna_model->updateDirection(15.24, 25.02);
 
-    Composer window(1200, 700);
+    std::string res_path;
+    try
+    {
+        ConfigManager cfg_manager;
+        cfg_manager.set_path(R"(../etc/)");
+        cfg_manager.load_config("morenos_settings");
+        auto& gui_settings = cfg_manager.get_section("gui");
+        res_path = cfg_manager.get_value<std::string>(gui_settings, "res_path");
+    }
+    catch(const std::exception& ex)
+    {
+        std::cerr << ex.what();
+        return -1;
+    }
+
+    Composer window;
+    window.set_exit_icon(QString::fromStdString(res_path + "exit_icon.png"));
 
     {
         QWidget* wrapper = new QWidget;
@@ -29,7 +47,7 @@ int main(int argc, char* argv[])
         h_layout->setSpacing(10);
         h_layout->setContentsMargins(0,0,0,0);
         PlotPosition* ppi = new PlotPosition(500, 800, 500, 800,
-                                             "D:\\Development\\GUI RCS\\UI_Elements\\Common\\Res\\radar_icon.png", wrapper);
+                                             QString::fromStdString(res_path + "radar_icon.png"), wrapper);
         ppi->set_model(antenna_model);
         ppi->set_model(targets_model->get_model());
         h_layout->addWidget(ppi);
@@ -46,10 +64,10 @@ int main(int argc, char* argv[])
         v_layout->addWidget(tt);
         h_layout->addLayout(v_layout);
 
-        window.add_menu_item("Observe", "D:\\Development\\GUI RCS\\UI_Elements\\Common\\Res\\observe_icon3.ico", wrapper);
+        window.add_menu_item("Observe", QString::fromStdString(res_path + "observe_icon.ico"), wrapper);
     }
 
-    window.show();
+    window.showFullScreen();
 
     std::thread message_thread([&]()
     {

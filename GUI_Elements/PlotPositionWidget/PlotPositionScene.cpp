@@ -4,13 +4,13 @@ PlotPositionScene::PlotPositionScene(QImage& radar_image, QObject *parent) :
     QGraphicsScene(parent),
     targets_(nullptr),
     antenna_params_(nullptr),
-    radar_image_(radar_image.scaled(190,110))
+    radar_image_(radar_image.scaled(180,100))
 {}
 
 void PlotPositionScene::drawBackground(QPainter *p, const QRectF &rect)
 {
     QRectF scene_size(rect);
-    scene_size.setWidth(scene_size.width() - margin_ * 2);
+    scene_size.setWidth(scene_size.width() - margin_ * 3);
     scene_size.setHeight(scene_size.height() - margin_ * 2);
 
     if (antenna_params_ == nullptr)
@@ -135,9 +135,14 @@ void PlotPositionScene::drawBackground(QPainter *p, const QRectF &rect)
 
         }
 
+        auto end_point = transform_coords(params.width / 2,
+                                          range_index * params.range_step + params.range_min,
+                                          QRectF(0, 0, scene_size.width(), scene_size.height() - bottom_offset_));
+
+        path.quadTo(end_point.x + margin_, end_point.y + 2*margin_,
+                    end_point.x + margin_, end_point.y + 2*margin_);
+
         p->drawPath(path);
-
-
     }
 
     // --------------------------- Draw Text ---------------------------------

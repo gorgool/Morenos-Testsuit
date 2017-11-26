@@ -14,7 +14,6 @@ MenuItem::MenuItem(const QString &title, const QString& icon_path, QWidget *disp
     button_widget_.setIconSize(button_widget_.size());
 
     QLabel* title_widget = new QLabel(&menu_widget_);
-    // For now. Replace with Icon image.
     title_widget->setText(title);
     title_widget->setFixedHeight(20);
     title_widget->setAlignment(Qt::AlignHCenter);

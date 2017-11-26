@@ -37,8 +37,6 @@ void PacketSender::send_packet(const SearchResult_Msg& msg)
 	memcpy(&data[sizeof(EthernetHeader) + sizeof(SystemHeader)], &msg_header, sizeof(MessageHeader));
 	memcpy(&data[sizeof(EthernetHeader) + sizeof(SystemHeader) + sizeof(MessageHeader)], payload, size);
 
-	auto r = size + sizeof(EthernetHeader) + sizeof(SystemHeader) + sizeof(MessageHeader);
-
 	auto err = pcap_sendpacket(handle, data, size + sizeof(EthernetHeader) + sizeof(SystemHeader) + sizeof(MessageHeader));
 	if (err != 0)
 		throw std::runtime_error("send message error.");

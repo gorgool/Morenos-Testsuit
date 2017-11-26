@@ -90,7 +90,7 @@ void deserialize(const unsigned char * const buf, PlotDescriptionRaw & ret)
 
 PlotDescription decode(const PlotDescriptionRaw & msg)
 {
-  PlotDescription ret{ 0 };
+  PlotDescription ret;
 
   ret.channel_id = msg.channel_id;
   ret.freq_range_start = msg.freq_range_start * (115.0 / std::pow(2, 10));
@@ -107,7 +107,7 @@ PlotDescription decode(const PlotDescriptionRaw & msg)
 
 PlotDescriptionRaw encode(const PlotDescription & msg)
 {
-  PlotDescriptionRaw ret{ 0 };
+  PlotDescriptionRaw ret;
 
   ret.channel_id = msg.channel_id;
   ret.freq_range_start = static_cast<std::uint16_t>(msg.freq_range_start / (115.0 / std::pow(2, 10)));
@@ -217,7 +217,7 @@ void deserialize(const unsigned char * const buf, SearchResult_MsgRaw & ret)
 
 SearchResult_Msg decode(const SearchResult_MsgRaw & msg)
 {
-  SearchResult_Msg ret{ 0 };
+  SearchResult_Msg ret;
 
   memcpy(&ret.transfer_time, &msg.transfer_time[0], 5);
 
@@ -238,7 +238,7 @@ SearchResult_Msg decode(const SearchResult_MsgRaw & msg)
 
 SearchResult_MsgRaw encode(const SearchResult_Msg & msg)
 {
-  SearchResult_MsgRaw ret{ 0 };
+  SearchResult_MsgRaw ret;
 
   memcpy(&ret.transfer_time, &msg.transfer_time, 5);
 

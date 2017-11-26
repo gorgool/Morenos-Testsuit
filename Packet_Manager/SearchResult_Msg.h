@@ -12,28 +12,28 @@
 struct PlotDescriptionRaw
 {
   /** @brief Referance time of the following parameters. */
-  std::uint8_t referance_time[5];
+  std::uint8_t referance_time[5] = {0, 0, 0, 0, 0};
 
   /** @brief Azimuth angle in cosine space. */
-  std::int16_t u;
+  std::int16_t u = 0;
 
   /** @brief Elevation angle in cosine space. */
-  std::int16_t v;
+  std::int16_t v = 0;
 
   /** @brief Varianve of u and v. */
-  std::uint16_t variance;
+  std::uint16_t variance = 0;
 
   /** @brief Id of the central channel assosiated with the current plot. */
-  std::uint8_t channel_id;
+  std::uint8_t channel_id = 0;
 
   /** @brief The logarithm of the reflected power from the current plot. */
-  std::uint16_t power;
+  std::uint16_t power = 0;
 
   /** @brief Begin of the frequency range. */
-  std::uint16_t freq_range_start;
+  std::uint16_t freq_range_start = 0;
 
   /** @brief The width of the frequency range, starting from freq_range_start. */
-  std::uint16_t freq_range_width;
+  std::uint16_t freq_range_width = 0;
 
   /** @brief Size of the message. */
   const static std::size_t msg_size;
@@ -48,28 +48,28 @@ struct PlotDescriptionRaw
 struct PlotDescription
 {
   /** @brief Referance time of the following parameters, microseconds. */
-  std::uint64_t referance_time;
+  std::uint64_t referance_time = 0;
 
   /** @brief Azimuth angle in cosine space, dimensionless. */
-  double u;
+  double u = 0.0;
 
   /** @brief Elevation angle in cosine space, dimensionless. */
-  double v;
+  double v = 0.0;
 
   /** @brief Varianve of u and v, dimensionless. */
-  double variance;
+  double variance = 0.0;
 
   /** @brief Id of the central channel assosiated with the current plot, dimensionless. */
-  std::uint8_t channel_id;
+  std::uint8_t channel_id = 0;
 
   /** @brief The logarithm of the reflected power from the current plot, dimensionless. */
-  double power;
+  double power = 0.0;
 
   /** @brief Begin of the frequency range, MHz. */
-  double freq_range_start;
+  double freq_range_start = 0.0;
 
   /** @brief The width of the frequency range, starting from freq_range_start, MHz. */
-  double freq_range_width;
+  double freq_range_width = 0.0;
 };
 
 /**
@@ -137,22 +137,22 @@ bool validate(const PlotDescription& msg);
 struct SearchResult_MsgRaw
 {
   /** @brief Device timestamp. */
-  std::uint8_t transfer_time[5];
+  std::uint8_t transfer_time[5] = {0, 0, 0, 0, 0};
 
   /** @brief Last signal processing timestamp. */
-  std::uint8_t process_time[5];
+  std::uint8_t process_time[5] = {0, 0, 0, 0, 0};
 
   /** @brief Type of polarization. */
-  std::uint8_t polarization_type;
+  std::uint8_t polarization_type = 0;
 
   /** @brief Central channels gain. */
-  std::uint16_t signal_amp[8];
+  std::uint16_t signal_amp[8] = {0, 0, 0, 0, 0, 0, 0, 0};
 
   /** @brief Id of the search area. */
-  std::uint8_t search_area_id;
+  std::uint8_t search_area_id = 0;
 
   /** @brief Number of discovered objects (plot). */
-  std::uint8_t plots_count;
+  std::uint8_t plots_count = 0;
 
   /** @brief Discovered plots. */
   std::vector<PlotDescriptionRaw> p;
@@ -173,22 +173,22 @@ struct SearchResult_MsgRaw
 struct SearchResult_Msg
 {
   /** Device timestamp, microseconds. */
-  std::uint64_t transfer_time;
+  std::uint64_t transfer_time = 0;
 
   /** Last signal processing timestamp, microseconds. */
-  std::uint64_t process_time;
+  std::uint64_t process_time = 0;
 
   /** Type of polarization. */
-  std::uint8_t polarization_type;
+  std::uint8_t polarization_type = 0;
 
   /** Central channels gain. */
-  double signal_amp[8];
+  double signal_amp[8] = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
 
   /** Id of the search area. */
-  std::uint8_t search_area_id;
+  std::uint8_t search_area_id = 0;
 
   /** Number of discovered objects (plot). */
-  std::uint8_t plots_count;
+  std::uint8_t plots_count = 0;
 
   /** Discovered plots. */
   std::vector<PlotDescription> p;

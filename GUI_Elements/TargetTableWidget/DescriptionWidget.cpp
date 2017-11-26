@@ -121,12 +121,12 @@ void DescriptionWidget::display()
         return;
     }
 
-    static QMap<PolarizationType, QString> polarization_translate = {
-        { PolarizationType::Vertical, "Vertical" },
-        { PolarizationType::Horizontal, "Horizontal" },
-        { PolarizationType::Elliptic, "Elliptic" },
-        { PolarizationType::Undefined, "Undefined" }
-    };
+    static QMap<PolarizationType, QString> polarization_translate{{
+            {PolarizationType::Vertical, "Vertical"},
+            {PolarizationType::Horizontal, "Horizontal"},
+            {PolarizationType::Elliptic, "Elliptic"},
+            {PolarizationType::Undefined, "Undefined"}
+    }};
 
     target_id_.setText(QString::number(target_->id));
     polarization_value_.setText(polarization_translate[target_->polarization]);
