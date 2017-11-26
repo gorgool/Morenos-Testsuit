@@ -5,24 +5,24 @@
 #include <vector>
 #include <cinttypes>
 
-class Scheduler;
+class EnvironmentState;
 
 /*
   Model event.
 */
 struct Event
 {
-  // Activation time, ns.
+  // Activation time, microseconds.
   std::uint64_t trigger_time;
 
   // event handler function.
   // handler signature: 
   //     input - class Scheduler referance.
   //     return - true for success, false otherwise
-  std::function<bool(Scheduler&)> exec;
+  std::function<void(EnvironmentState&)> exec;
 
   // Constructor
-  Event(std::uint64_t _trigger_time, std::function<bool(Scheduler&)>&& callback) : trigger_time(_trigger_time), exec(callback) {}
+  Event(std::uint64_t _trigger_time, std::function<void(EnvironmentState&)>&& callback) : trigger_time(_trigger_time), exec(callback) {}
 
   friend bool operator<(const Event& lhs, const Event& rhs)
   {

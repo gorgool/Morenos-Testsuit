@@ -12,8 +12,11 @@ MOC_DIR = ../build
 OBJECTS_DIR = ../build
 
 HEADERS += \
-  SimulationEngine.h
+  EventQueue.h \
+  ModelEngine.h \
+    SimulationState.h
 
 SOURCES += \
   main.cpp \
-  SimulationEngine.cpp
+    SimulationState.cpp \
+    ModelEngine.cpp
