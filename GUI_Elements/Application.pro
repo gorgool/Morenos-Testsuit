@@ -12,8 +12,8 @@ LIBS = -lComposer -lData_Models -lPlotPosition -lPortraitPlane \
        -lTargetTable -lPacket_Manager -lpcap -lConfig_Manager \
        -lboost_filesystem -lboost_system
 
-MOC_DIR = ../../build
-OBJECTS_DIR = ../../build
+MOC_DIR = ../build
+OBJECTS_DIR = ../build
 DESTDIR = ../bin
 
 HEADERS += \
@@ -21,5 +21,5 @@ HEADERS += \
   TargetsModelAdapter.h
 
 SOURCES += \
-  main.cpp \
+  GUIApplication.cpp \
   TargetsModelAdapter.cpp

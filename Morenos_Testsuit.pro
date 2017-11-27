@@ -1,6 +1,6 @@
 TEMPLATE = subdirs
-
-SUBDIRS = Morenos_GUI Packet_Manager Simulation_Engine Config_Manager
+CONFIG += ordered
+SUBDIRS = Packet_Manager Config_Manager Morenos_GUI Simulation_Engine 
 
 Morenos_GUI.file = GUI_Elements/Morenos_GUI.pro
 Packet_Manager.file = Packet_Manager/Packet_Manager.pro

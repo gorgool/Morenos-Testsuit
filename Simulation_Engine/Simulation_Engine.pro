@@ -5,7 +5,7 @@ CONFIG += c++14
 INCLUDEPATH += ../Packet_Manager
 
 QMAKE_LIBDIR = ../libs
-LIBS = -lPacket_Manager -lpcap
+LIBS = -lPacket_Manager -lpcap -lboost_system -lboost_filesystem
 
 DESTDIR = ../bin
 MOC_DIR = ../build
@@ -17,6 +17,6 @@ HEADERS += \
     SimulationState.h
 
 SOURCES += \
-  main.cpp \
+    SimulationEngine.cpp \
     SimulationState.cpp \
     ModelEngine.cpp
