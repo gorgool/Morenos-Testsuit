@@ -28,14 +28,13 @@ PacketSender::~PacketSender()
 void PacketSender::send_packet(const SearchResult_Msg& msg)
 {
 	auto p = encode(msg);
-	auto size = serialize(p, payload);
+	auto size = serialize(p, &data[sizeof(EthernetHeader) + sizeof(SystemHeader) + sizeof(MessageHeader)]);
 
-	eth_header.type = size + 26;
+	eth_header.type = size + sizeof(EthernetHeader) + sizeof(SystemHeader) + sizeof(MessageHeader);
 	memcpy(&data[0], &eth_header, sizeof(EthernetHeader));
 	memcpy(&data[sizeof(EthernetHeader)], &sys_header, sizeof(SystemHeader));
 	msg_header.msg_lenght = 10 + size;
 	memcpy(&data[sizeof(EthernetHeader) + sizeof(SystemHeader)], &msg_header, sizeof(MessageHeader));
-	memcpy(&data[sizeof(EthernetHeader) + sizeof(SystemHeader) + sizeof(MessageHeader)], payload, size);
 
 	auto err = pcap_sendpacket(handle, data, size + sizeof(EthernetHeader) + sizeof(SystemHeader) + sizeof(MessageHeader));
 	if (err != 0)

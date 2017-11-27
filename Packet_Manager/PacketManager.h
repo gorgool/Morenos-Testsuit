@@ -44,9 +44,6 @@ private:
 
 	/** @brief Buffer for message raw data. */
 	unsigned char data[1500];
-
-	/** @brief TODO REMOVE. REWRITE TO USE UNLY DATA. */
-  unsigned char payload[1500];
 };
 
 /**
