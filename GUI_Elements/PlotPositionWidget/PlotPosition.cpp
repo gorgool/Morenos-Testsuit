@@ -34,6 +34,7 @@ PlotPosition::PlotPosition(const int width, const int height,
     v_layout->addWidget(&graph_);
 
     graph_.setScene(&scene_);
+    graph_.setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform);
 }
 
 PlotPosition::~PlotPosition() {}
