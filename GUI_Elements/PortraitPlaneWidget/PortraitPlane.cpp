@@ -7,7 +7,6 @@
 #include <cmath>
 
 PortraitPlane::PortraitPlane(const int width, const int height,
-                             const int min_width, const int min_height,
                              QWidget *parent) :
     QWidget(parent),
     graph_(this),
@@ -16,8 +15,6 @@ PortraitPlane::PortraitPlane(const int width, const int height,
     antenna_params_(nullptr)
 {
     resize(width, height);
-    setMinimumHeight(min_height);
-    setMinimumWidth(min_width);
     setContentsMargins(0,0,0,0);
 
     QLabel* title = new QLabel("Portrait Plane", this);

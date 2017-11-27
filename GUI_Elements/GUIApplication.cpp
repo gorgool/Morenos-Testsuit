@@ -46,7 +46,7 @@ int main(int argc, char* argv[])
         QHBoxLayout* h_layout = new QHBoxLayout(wrapper);
         h_layout->setSpacing(10);
         h_layout->setContentsMargins(0,0,0,0);
-        PlotPosition* ppi = new PlotPosition(400, 500, 400, 500,
+        PlotPosition* ppi = new PlotPosition(400, 500,
                                              QString::fromStdString(res_path + "radar_icon.png"), wrapper);
         ppi->set_model(antenna_model);
         ppi->set_model(targets_model->get_model());
@@ -54,10 +54,10 @@ int main(int argc, char* argv[])
         QVBoxLayout* v_layout = new QVBoxLayout;
         v_layout->setSpacing(10);
         v_layout->setContentsMargins(0,0,0,0);
-        PortraitPlane* pp = new PortraitPlane(800, 300, 800, 300, wrapper);
+        PortraitPlane* pp = new PortraitPlane(800, 300, wrapper);
         pp->set_model(antenna_model);
         pp->set_model(targets_model->get_model());
-        TargetTable* tt = new TargetTable(800, 450, 800, 450, wrapper);
+        TargetTable* tt = new TargetTable(800, 450, wrapper);
         tt->set_model(antenna_model);
         tt->set_model(targets_model->get_model());
         v_layout->addWidget(pp);

@@ -17,7 +17,6 @@ class PlotPosition : public QWidget
 
 public:
     PlotPosition(const int width, const int height,
-                 const int min_width, const int min_height,
                  const QString& image_path, QWidget* parent = 0);
     ~PlotPosition();
 

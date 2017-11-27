@@ -19,7 +19,6 @@ class TargetTable : public QWidget
 
 public:
     TargetTable(const int width, const int height,
-                const int min_width = 500, const int min_height = 500,
                 QWidget* parent = 0);
 
     ~TargetTable();

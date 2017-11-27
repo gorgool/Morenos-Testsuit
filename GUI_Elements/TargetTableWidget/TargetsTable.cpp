@@ -2,15 +2,13 @@
 #include <QHeaderView>
 #include <QDebug>
 
-TargetTable::TargetTable(const int width, const int height, const int min_width, const int min_height, QWidget *parent) :
+TargetTable::TargetTable(const int width, const int height, QWidget *parent) :
     QWidget(parent),
     table_(this),
     targets_(nullptr),
     antenna_params_(nullptr)
 {
     resize(width, height);
-    setMinimumHeight(min_height);
-    setMinimumWidth(min_width);
     setContentsMargins(0,0,0,0);
 
     // Title
