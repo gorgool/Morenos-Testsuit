@@ -38,7 +38,8 @@ private:
     bool target_setted_;
 
     // Font
-    QFont font_;
+    QFont title_font_;
+    QFont info_font_;
 
     // Parameters values labels
     QLabel target_id_;

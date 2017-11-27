@@ -4,7 +4,7 @@ PlotPositionScene::PlotPositionScene(QImage& radar_image, QObject *parent) :
     QGraphicsScene(parent),
     targets_(nullptr),
     antenna_params_(nullptr),
-    radar_image_(radar_image.scaled(160,bottom_offset_))
+    radar_image_(radar_image.scaled(160, 100))
 {}
 
 void PlotPositionScene::drawBackground(QPainter *p, const QRectF &rect)

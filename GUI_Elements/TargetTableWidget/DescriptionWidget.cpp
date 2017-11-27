@@ -10,13 +10,16 @@ DescriptionWidget::DescriptionWidget(QWidget *parent) :
     setMinimumWidth(widget_width);
     setMaximumWidth(widget_width);
 
+    info_font_.setPixelSize(14);
+    info_font_.setFamily("Segoe UI Light");
+
     // Title
     QLabel* title = new QLabel("Target Description", this);
     title->setAlignment(Qt::AlignHCenter);
-    font_.setBold(true);
-    font_.setPixelSize(16);
-    font_.setFamily("Segoe UI Light");
-    title->setFont(font_);
+    title_font_.setBold(true);
+    title_font_.setPixelSize(16);
+    title_font_.setFamily("Segoe UI Light");
+    title->setFont(title_font_);
 
     // Layout
     QVBoxLayout* v_layout = new QVBoxLayout(this);
@@ -34,8 +37,8 @@ DescriptionWidget::DescriptionWidget(QWidget *parent) :
     {
         QLabel* name_label = new QLabel(this);
         name_label->setText(field_name + " : ");
-        name_label->setFont(font_);
-        value.setFont(font_);
+        name_label->setFont(info_font_);
+        value.setFont(info_font_);
         QWidget* label = new QWidget(this);
         QHBoxLayout* layout = new QHBoxLayout(label);
         layout->setContentsMargins(0, 0, 0, 0);

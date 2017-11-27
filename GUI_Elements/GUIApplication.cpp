@@ -1,5 +1,6 @@
 #include <QApplication>
 #include <QDebug>
+#include <QDesktopWidget>
 #include <thread>
 #include <chrono>
 #include <mutex>
@@ -46,23 +47,29 @@ int main(int argc, char* argv[])
         QHBoxLayout* h_layout = new QHBoxLayout(wrapper);
         h_layout->setSpacing(10);
         h_layout->setContentsMargins(0,0,0,0);
-        PlotPosition* ppi = new PlotPosition(400, 500,
+
+        PlotPosition* ppi = new PlotPosition(300, 500,
                                              QString::fromStdString(res_path + "radar_icon.png"), wrapper);
+
         ppi->set_model(antenna_model);
         ppi->set_model(targets_model->get_model());
         h_layout->addWidget(ppi);
+        h_layout->setStretchFactor(ppi, 3);
+
         QVBoxLayout* v_layout = new QVBoxLayout;
         v_layout->setSpacing(10);
         v_layout->setContentsMargins(0,0,0,0);
-        PortraitPlane* pp = new PortraitPlane(800, 300, wrapper);
+
+        PortraitPlane* pp = new PortraitPlane(1000, 300, wrapper);
         pp->set_model(antenna_model);
         pp->set_model(targets_model->get_model());
-        TargetTable* tt = new TargetTable(800, 450, wrapper);
+        TargetTable* tt = new TargetTable(1000, 450, wrapper);
         tt->set_model(antenna_model);
         tt->set_model(targets_model->get_model());
         v_layout->addWidget(pp);
         v_layout->addWidget(tt);
         h_layout->addLayout(v_layout);
+        h_layout->setStretchFactor(v_layout, 5);
 
         window.add_menu_item("Observe", QString::fromStdString(res_path + "observe_icon.ico"), wrapper);
     }

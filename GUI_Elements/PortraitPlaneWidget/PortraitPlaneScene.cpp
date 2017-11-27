@@ -70,7 +70,7 @@ void PortraitPlaneScene::drawBackground(QPainter *p, const QRectF &rect)
 
     // --------------------------- Draw Text ------------------------------
     // "U" Axes label
-    const int width_u_label_offset = -4;
+    const int width_u_label_offset = 10;
     const int height_u_label_offset = -4;
     p->drawText(QPoint(scene_size.width() + width_u_label_offset, h_center + height_u_label_offset),"U");
 
