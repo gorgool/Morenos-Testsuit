@@ -36,6 +36,9 @@ public:
   /** @brief JSON object type. */
   using Object = const rapidjson::Value&;
 
+  /** @brief JSON pointer to object type. */
+  using ObjectPtr = const rapidjson::Value*;
+
   /**
    * @fn  void ConfigManager::set_path(const std::string& path);
    *
@@ -162,12 +165,26 @@ public:
   RetType get_value(const Settings settings, const char* key = nullptr) const;
 
   /**
+   * @fn  std::vector<Object> get_object_array(const Settings settings, const char* key = nullptr) const;
+   *
+   * @brief Gets an array of JSON objects by name for specific section.
+   *
+   * @exception ConfigException Thrown if the key don't exists or values in the array is not JSON objects.
+   *                            
+   * @param settings  Section settings or Object.
+   * @param key       The key.
+   *
+   * @return  A std::vector&ltObject&gt;
+   */
+  std::vector<ObjectPtr> get_object_array(const Settings settings, const char* key = nullptr) const;
+
+  /**
    * @fn  template<typename RetType, std::size_t Size> std::array<RetType, Size> ConfigManager::get_array(const Object& settings) const;
    *
    * @brief Converts the object to an array.
    *
    * @exception ConfigException Thrown if the object can't be cast to an array.
-   *                            
+   *
    * @tparam  RetType  Type of the array.
    * @tparam   Size    Size of the array.
    * @param   object   JSON Object.
@@ -175,7 +192,7 @@ public:
    * @return  A std::array&lt;RetType,Size&gt;
    */
 
-  template<typename RetType> 
+  template<typename RetType>
   std::vector<RetType> get_array(const Object object) const;
 
   /**

@@ -83,9 +83,12 @@ int main(int argc, char* argv[])
             try
             {
                 SearchResult_Msg msg;
-                auto ret = receiver->wait_packet(msg);
+                auto ret = receiver->read_packet(msg);
                 if (ret == 0)
                     continue;
+
+                if (validate(msg) == false)
+                    throw std::runtime_error("Validation failed.");
 
                 targets_model->update(msg, 10001, TargetType::Interference);
             }

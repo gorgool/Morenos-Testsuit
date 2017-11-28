@@ -15,8 +15,21 @@ int main(int argc, const char* argv[])
 {
   try
   {
-    PacketSender sender;
     ModelEngine engine;
+
+    engine.load_events();
+
+    std::thread th(
+    [&]()
+    {
+        engine.run();
+    });
+
+    std::cin.ignore();
+    engine.stop();
+    th.join();
+
+    return 0;
   }
   catch (const std::runtime_error& ex)
   {

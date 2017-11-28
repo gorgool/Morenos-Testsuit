@@ -1,11 +1,11 @@
 TEMPLATE = app
 TARGET = morenos_imitator
-CONFIG += c++14
+CONFIG += c++14 console
 
-INCLUDEPATH += ../Packet_Manager
+INCLUDEPATH += ../Packet_Manager ../Config_Manager ../Exceptions
 
 QMAKE_LIBDIR = ../libs
-LIBS = -lPacket_Manager -lpcap -lboost_system -lboost_filesystem
+LIBS = -lPacket_Manager -lConfig_Manager -lpcap -lboost_system -lboost_filesystem
 
 DESTDIR = ../bin
 MOC_DIR = ../build

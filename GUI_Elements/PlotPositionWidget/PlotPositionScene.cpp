@@ -10,8 +10,10 @@ PlotPositionScene::PlotPositionScene(QImage& radar_image, QObject *parent) :
 void PlotPositionScene::drawBackground(QPainter *p, const QRectF &rect)
 {
     QRectF scene_size(rect);
-    scene_size.setWidth(scene_size.width() - margin_ * 3);
-    scene_size.setHeight(scene_size.height() - margin_ * 2);
+    const int horizontal_margin = margin_ * 3;
+    const int vertical_margin = margin_ * 2;
+    scene_size.setWidth(scene_size.width() - horizontal_margin);
+    scene_size.setHeight(scene_size.height() - vertical_margin);
 
     if (antenna_params_ == nullptr)
         return;
@@ -19,8 +21,8 @@ void PlotPositionScene::drawBackground(QPainter *p, const QRectF &rect)
     auto params = antenna_params_->readGridParams();
 
     // ------------------------- Draw Radar Icon -------------------------------------------
-    p->drawImage(scene_size.width() / 2 - radar_image_.width() / 2 + margin_,
-                 scene_size.height() - bottom_offset_ + margin_ * 2,
+    p->drawImage(scene_size.width() / 2 - radar_image_.width() / 2 + horizontal_margin / 2,
+                 scene_size.height() - bottom_offset_ + vertical_margin,
                  radar_image_);
 
 
@@ -39,8 +41,8 @@ void PlotPositionScene::drawBackground(QPainter *p, const QRectF &rect)
                                                 params.range_min,
                                                 QRectF(0, 0, scene_size.width(), scene_size.height() - bottom_offset_));
 
-        p->drawLine(screen_coords_1.x + margin_, screen_coords_1.y + 2*margin_,
-                    screen_coords_2.x + margin_, screen_coords_2.y + 2*margin_);
+        p->drawLine(screen_coords_1.x + horizontal_margin / 2, screen_coords_1.y + vertical_margin,
+                    screen_coords_2.x + horizontal_margin / 2, screen_coords_2.y + vertical_margin);
     }
 
     // Right border line
@@ -52,8 +54,8 @@ void PlotPositionScene::drawBackground(QPainter *p, const QRectF &rect)
                                                 params.range_min,
                                                 QRectF(0, 0, scene_size.width(), scene_size.height() - bottom_offset_));
 
-        p->drawLine(screen_coords_1.x + margin_, screen_coords_1.y + 2*margin_,
-                    screen_coords_2.x + margin_, screen_coords_2.y + 2*margin_);
+        p->drawLine(screen_coords_1.x + horizontal_margin / 2, screen_coords_1.y + vertical_margin,
+                    screen_coords_2.x + horizontal_margin / 2, screen_coords_2.y + vertical_margin);
     }
 
     axes_pen.setStyle(Qt::DashLine);
@@ -67,8 +69,8 @@ void PlotPositionScene::drawBackground(QPainter *p, const QRectF &rect)
                                                 params.range_min,
                                                 QRectF(0, 0, scene_size.width(), scene_size.height() - bottom_offset_));
 
-        p->drawLine(screen_coords_1.x + margin_, screen_coords_1.y + 2*margin_,
-                    screen_coords_2.x + margin_, screen_coords_2.y + 2*margin_);
+        p->drawLine(screen_coords_1.x + horizontal_margin / 2, screen_coords_1.y + vertical_margin,
+                    screen_coords_2.x + horizontal_margin / 2, screen_coords_2.y + vertical_margin);
     }
 
     // --------------------------- Draw grid ---------------------------------
@@ -91,8 +93,8 @@ void PlotPositionScene::drawBackground(QPainter *p, const QRectF &rect)
             if (screen_coords_1.x < scene_size.width() && screen_coords_1.y < scene_size.height() &&
                 screen_coords_2.x < scene_size.width() && screen_coords_2.y < scene_size.height())
             {
-                p->drawLine(screen_coords_1.x + margin_, screen_coords_1.y + 2*margin_,
-                            screen_coords_2.x + margin_, screen_coords_2.y + 2*margin_);
+                p->drawLine(screen_coords_1.x + horizontal_margin / 2, screen_coords_1.y + vertical_margin,
+                            screen_coords_2.x + horizontal_margin / 2, screen_coords_2.y + vertical_margin);
             }
         }
         // To the left
@@ -107,8 +109,8 @@ void PlotPositionScene::drawBackground(QPainter *p, const QRectF &rect)
             if (screen_coords_1.x < scene_size.width() && screen_coords_1.y < scene_size.height() &&
                 screen_coords_2.x < scene_size.width() && screen_coords_2.y < scene_size.height())
             {
-                p->drawLine(screen_coords_1.x + margin_, screen_coords_1.y + 2*margin_,
-                            screen_coords_2.x + margin_, screen_coords_2.y + 2*margin_);
+                p->drawLine(screen_coords_1.x + horizontal_margin / 2, screen_coords_1.y + vertical_margin,
+                            screen_coords_2.x + horizontal_margin / 2, screen_coords_2.y + vertical_margin);
             }
         }
     }
@@ -122,7 +124,7 @@ void PlotPositionScene::drawBackground(QPainter *p, const QRectF &rect)
                                             range_index * params.range_step + params.range_min,
                                             QRectF(0, 0, scene_size.width(), scene_size.height() - bottom_offset_));
 
-        path.moveTo(start_point.x + margin_, start_point.y + 2*margin_);
+        path.moveTo(start_point.x + horizontal_margin / 2, start_point.y + vertical_margin);
 
         for(int dir_index = 1; dir_index < params.width / params.step; ++dir_index)
         {
@@ -130,8 +132,8 @@ void PlotPositionScene::drawBackground(QPainter *p, const QRectF &rect)
                                                range_index * params.range_step + params.range_min,
                                                QRectF(0, 0, scene_size.width(), scene_size.height() - bottom_offset_));
 
-            path.quadTo(next_point.x + margin_, next_point.y + 2*margin_,
-                        next_point.x + margin_, next_point.y + 2*margin_);
+            path.quadTo(next_point.x + horizontal_margin / 2, next_point.y + vertical_margin,
+                        next_point.x + horizontal_margin / 2, next_point.y + vertical_margin);
 
         }
 
@@ -139,8 +141,8 @@ void PlotPositionScene::drawBackground(QPainter *p, const QRectF &rect)
                                           range_index * params.range_step + params.range_min,
                                           QRectF(0, 0, scene_size.width(), scene_size.height() - bottom_offset_));
 
-        path.quadTo(end_point.x + margin_, end_point.y + 2*margin_,
-                    end_point.x + margin_, end_point.y + 2*margin_);
+        path.quadTo(end_point.x + horizontal_margin / 2, end_point.y + vertical_margin,
+                    end_point.x + horizontal_margin / 2, end_point.y + vertical_margin);
 
         p->drawPath(path);
     }
@@ -156,7 +158,7 @@ void PlotPositionScene::drawBackground(QPainter *p, const QRectF &rect)
     auto left_point = transform_coords(params.width / 2, params.range_max,
                                        QRectF(0, 0, scene_size.width(), scene_size.height() - bottom_offset_));
 
-    p->drawText(QPoint(left_point.x + margin_ - 30, left_point.y + 2*margin_ - 20),
+    p->drawText(QPoint(left_point.x + horizontal_margin / 2 - 30, left_point.y + vertical_margin - 20),
                 QString::number(params.range_max, 'f', 1));
 
     // Draw range labels
@@ -165,7 +167,7 @@ void PlotPositionScene::drawBackground(QPainter *p, const QRectF &rect)
         auto left_point = transform_coords(params.width / 2, range_index * params.range_step + params.range_min,
                                            QRectF(0, 0, scene_size.width(), scene_size.height() - bottom_offset_));
 
-        p->drawText(QPoint(left_point.x + margin_ + 20, left_point.y + 2*margin_),
+        p->drawText(QPoint(left_point.x + horizontal_margin / 2 + 10, left_point.y + vertical_margin),
                 QString::number(range_index * params.range_step + params.range_min, 'f', 1));
     }
 }

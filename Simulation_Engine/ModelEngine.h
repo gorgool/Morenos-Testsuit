@@ -1,11 +1,12 @@
 #pragma once
 
 #include <cinttypes>
-#include <chrono>
 #include <iostream>
+#include <atomic>
 
 #include "EventQueue.h"
 #include "SimulationState.h"
+#include "PacketManager.h"
 
 /*
   Model engine. Control execution of the model.
@@ -13,24 +14,33 @@
 
 class ModelEngine
 {
+  // Network packets manager.
+  PacketSender sender_;
+
   // Event queue.
   EventQueue ev_queue_;
 
-  // Current modelling time, microseconds.
+  // Current modelling time, milliseconds.
   std::uint64_t model_time_ = 0;
 
-  // Modelling step, microseconds.
+  // Modelling step, milliseconds.
   std::uint64_t time_step_ = 100;
 
   EnvironmentState state_;
 
+  std::atomic_bool running_;
+
 public:
 
   // Constructor.
-  ModelEngine() {}
+  ModelEngine() : running_(false) {}
 
-  // Execution of "times" modelling cycles. 
+  // Execution of modelling cycle. Blocking.
   void run();
 
-  void load_events(const std::string& file_path);
+  // Stop modelling execution.
+  void stop();
+
+  // Load model events from file.
+  void load_events();
 };

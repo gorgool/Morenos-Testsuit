@@ -65,8 +65,8 @@ void TargetState::advance(std::uint64_t time)
 	// If time delta greater than threshold preserve current coordinate state
     if (time_delta < delta_threshold_)
 	{
-        current_u_ += u_vel_ * (time_delta * 1.0e-6);
-        current_v_ += v_vel_ * (time_delta * 1.0e-6);
+        current_u_ += u_vel_ * (time_delta * 1.0e-3);
+        current_v_ += v_vel_ * (time_delta * 1.0e-3);
 
 		// If coordinates larger than 1.0 wrap it
         if (std::abs(current_u_) > 1.0) current_u_ = current_u_ - std::copysign(1.0, current_u_);
@@ -173,7 +173,7 @@ void EnvironmentState::advance(std::uint64_t time)
     {
 		t.advance(time);
         // Wrap coordinates, to keep target in scan area.
-        if (check_limits(t.get_u(), t.get_v()))
+        if (check_limits(t.get_u(), t.get_v()) == false)
             t.reset();
     }
 

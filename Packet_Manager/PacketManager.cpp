@@ -59,7 +59,7 @@ PacketReceiver::PacketReceiver() :
 	if (pcap_lookupnet(interfaces->name, &net, &mask, errbuf) == -1)
 		throw std::runtime_error("Couldn't find default device: " + std::string(errbuf));
 
-	handle = pcap_open_live(interfaces->name, BUFSIZ, 1, 1000, errbuf);
+    handle = pcap_open_live(interfaces->name, BUFSIZ, 1, 1, errbuf);
 	if (handle == NULL)
 		throw std::runtime_error("Couldn't find default device: " + std::string(errbuf));
 
@@ -77,7 +77,7 @@ PacketReceiver::~PacketReceiver()
 	pcap_close(handle);
 }
 
-int PacketReceiver::wait_packet(SearchResult_Msg & msg)
+int PacketReceiver::read_packet(SearchResult_Msg & msg)
 {
     auto ret = pcap_next_ex(handle, &desc_header, &data);
 

@@ -169,6 +169,39 @@ ConfigManager::Object ConfigManager::get_object(const Settings settings, const c
     throw ConfigException("Configuration Manager: Unknown object name.");
 }
 
+std::vector<ConfigManager::ObjectPtr> ConfigManager::get_object_array(const Settings settings, const char* key) const
+{
+    if (config_loaded_ == false)
+      throw ConfigException("Configuration Manager: Config not loaded.");
+
+    if (key != nullptr)
+    {
+      if (settings.HasMember(key))
+      {
+        std::vector<ConfigManager::ObjectPtr> ret;
+        auto& obj = settings[key];
+
+        if (!obj.IsArray())
+            throw ConfigException("Configuration Manager: Parse error.");
+
+        for (rapidjson::Value::ConstValueIterator itr = obj.Begin(); itr != obj.End(); ++itr)
+        {
+            if (!itr->IsObject())
+                throw ConfigException("Configuration Manager: Parse error.");
+            ret.push_back(itr);
+        }
+
+        return ret;
+      }
+      else
+        throw ConfigException("Configuration Manager: Parse error.");
+    }
+    else
+    {
+      throw ConfigException("Configuration Manager: Parse error.");
+    }
+}
+
 void ConfigManager::set_value(Settings settings, const char * key, const std::string & value)
 {
   if (config_loaded_ == false)

@@ -60,15 +60,15 @@ public:
 	~PacketReceiver();
 
 	/**
-   * @fn  int PacketReceiver::wait_packet(SearchResult_Msg& msg);
+   * @fn  int PacketReceiver::read_packet(SearchResult_Msg& msg);
    *
-   * @brief Wait for incoming message. Timeout 1 second.
+   * @brief Reading incloming messages. If there are no incoming messages block for 1 millisecond.
    *
    * @param msg Reference to message, where incoming message be written.
 	 * 
 	 * @return 0 if timeout expired; 1 on success receive.
    */
-	int wait_packet(SearchResult_Msg& msg);
+    int read_packet(SearchResult_Msg& msg);
 
 private:
 
