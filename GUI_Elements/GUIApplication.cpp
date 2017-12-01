@@ -19,6 +19,7 @@ int main(int argc, char* argv[])
     PacketReceiver* receiver = new PacketReceiver;
     AntennaParamsModel* antenna_model = new AntennaParamsModel;
     TargetsModelAdapter* targets_model = new TargetsModelAdapter;
+    MessagesModel* messages;
 
     antenna_model->updateGridParams(0.5, 0.5, 0.02, 10000.0, 1.5e6, 1.5e5);
     antenna_model->updateDirection(15.24, 25.02);
@@ -31,6 +32,7 @@ int main(int argc, char* argv[])
         cfg_manager.load_config("morenos_settings");
         auto& gui_settings = cfg_manager.get_section("gui");
         res_path = cfg_manager.get_value<std::string>(gui_settings, "res_path");
+        messages = new MessagesModel(QString::fromStdString(cfg_manager.get_value<std::string>(gui_settings, "reg_path")));
     }
     catch(const std::exception& ex)
     {
@@ -73,6 +75,11 @@ int main(int argc, char* argv[])
 
         window.add_menu_item("Observe", QString::fromStdString(res_path + "observe_icon.ico"), wrapper);
     }
+    {
+        PacketMonitor* monitor = new PacketMonitor;
+        monitor->set_model(messages);
+        window.add_menu_item("Debug", QString::fromStdString(res_path + "debug_icon.png"), monitor);
+    }
 
     window.showFullScreen();
 
@@ -82,15 +89,22 @@ int main(int argc, char* argv[])
         {
             try
             {
-                SearchResult_Msg msg;
+                SearchResult_MsgRaw msg;
                 auto ret = receiver->read_packet(msg);
                 if (ret == 0)
                     continue;
 
-                if (validate(msg) == false)
-                    throw std::runtime_error("Validation failed.");
+                // Register message
+                auto& e = messages->add_entry(msg);
 
-                targets_model->update(msg, 10001, TargetType::Interference);
+                auto decoded_msg = decode(msg);
+                if (validate(decoded_msg) == false)
+                {
+                    messages->log("Message validation failed. ID : " + e.get_id());
+                    continue;
+                }
+
+                targets_model->update(decoded_msg, 10001, TargetType::Interference);
             }
             catch(std::runtime_error& ex)
             {

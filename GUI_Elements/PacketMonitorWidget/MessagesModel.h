@@ -4,21 +4,23 @@
 #include <QStringListModel>
 
 #include <QList>
-#include "../../../Packet_Generator/SearchResult_Msg.h"
+#include "SearchResult_Msg.h"
 #include "MessagesListModel.h"
 
 struct PacketEntry
 {
+    std::uint64_t id;
     SearchResult_MsgRaw raw_msg;
     std::uint64_t get_id() const;
     std::string get_title() const;
+    static std::uint64_t generate_id();
 };
 
 class MessagesModel : public QAbstractTableModel
 {
     Q_OBJECT
 public:
-    MessagesModel();
+    MessagesModel(const QString& reg_files_dir);
 
     int rowCount(const QModelIndex &parent = QModelIndex()) const override ;
     int columnCount(const QModelIndex &parent = QModelIndex()) const override;
@@ -26,7 +28,7 @@ public:
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
     QVariant headerData(int section, Qt::Orientation orientation, int role) const override;
 
-    void add_entry(SearchResult_MsgRaw& msg);
+    PacketEntry& add_entry(SearchResult_MsgRaw& msg);
     void log(const QString& log_text);
 
     MessagesListModel* get_list_model();
@@ -37,8 +39,9 @@ signals:
     void set_plots(bool);
 
 public slots:
-    void change_plot_mode();
+    void change_plot_mode(int);
     void select_plots(QModelIndex idx);
+    void save_to_file();
 
 private:
     QList<PacketEntry> journal_;
@@ -46,5 +49,7 @@ private:
 
     bool decoded_ = false;
     QList<PlotDescriptionRaw> selected_plots_;
+
+    QString reg_files_dir_;
 };
 

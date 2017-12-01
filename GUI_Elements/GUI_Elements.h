@@ -7,3 +7,5 @@
 #include "PlotPositionWidget/PlotPosition.h"
 #include "PortraitPlaneWidget/PortraitPlane.h"
 #include "TargetTableWidget/TargetsTable.h"
+#include "PacketMonitorWidget/PacketMonitor.h"
+#include "PacketMonitorWidget/MessagesModel.h"

@@ -5,6 +5,8 @@
 #include <QPlainTextEdit>
 #include <QTableView>
 #include <QListView>
+#include <QCheckBox>
+#include <QPushButton>
 #include <QTreeWidget>
 
 #include "MessagesModel.h"
@@ -32,4 +34,7 @@ private:
 
     QPlainTextEdit log_widget_;
     QTreeWidget plot_view_;
+
+    QCheckBox decoded_check;
+    QPushButton save_button;
 };

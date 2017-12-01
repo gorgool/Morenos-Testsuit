@@ -1,10 +1,12 @@
 #include "MessagesModel.h"
 #include <cassert>
+#include <QDateTime>
+#include <QTextStream>
+#include <QDir>
 
 uint64_t PacketEntry::get_id() const
 {
-    static std::uint64_t packet_id = 1000;
-    return packet_id++;
+    return id;
 }
 
 std::string PacketEntry::get_title() const
@@ -12,47 +14,14 @@ std::string PacketEntry::get_title() const
     return "Message 27.1 - id : " + std::to_string(get_id());
 }
 
-MessagesModel::MessagesModel()
+uint64_t PacketEntry::generate_id()
 {
-    selected_plots_.push_back(
-                PlotDescriptionRaw
-                {
-                    {
-                        static_cast<std::uint8_t>(245),
-                        static_cast<std::uint8_t>(100),
-                        static_cast<std::uint8_t>(1),
-                        static_cast<std::uint8_t>(0),
-                        static_cast<std::uint8_t>(0)
-                    },
-                    1154,
-                    4021,
-                    1010,
-                    8,
-                    12530,
-                    56,
-                    3
-                }
-                );
-    selected_plots_.push_back(
-                PlotDescriptionRaw
-                {
-                    {
-                        static_cast<std::uint8_t>(245),
-                        static_cast<std::uint8_t>(100),
-                        static_cast<std::uint8_t>(1),
-                        static_cast<std::uint8_t>(0),
-                        static_cast<std::uint8_t>(0)
-                    },
-                    1154,
-                    4021,
-                    1010,
-                    8,
-                    12530,
-                    56,
-                    3
-                }
-                );
+    static std::uint64_t packet_id = 1000;
+    return packet_id++;
 }
+
+MessagesModel::MessagesModel(const QString& reg_files_dir) : reg_files_dir_(reg_files_dir)
+{}
 
 int MessagesModel::rowCount(const QModelIndex &parent) const
 {
@@ -82,7 +51,7 @@ QVariant MessagesModel::data(const QModelIndex &index, int role) const
         {
         case 0:
         {
-            std::uint64_t process_time = 0;
+            quint64 process_time = 0;
             memcpy(&process_time, &t.raw_msg.process_time[0], 5);
             return process_time;
         }
@@ -136,15 +105,18 @@ QVariant MessagesModel::headerData(int section, Qt::Orientation orientation, int
     return QVariant();
 }
 
-void MessagesModel::add_entry(SearchResult_MsgRaw &msg)
+PacketEntry& MessagesModel::add_entry(SearchResult_MsgRaw &msg)
 {
     PacketEntry entry;
     entry.raw_msg = msg;
+    entry.id = PacketEntry::generate_id();
     entries_list_.add(QString::fromStdString(entry.get_title()));
 
     beginInsertRows(QModelIndex(), rowCount() + 1, rowCount() + 1);
     journal_.push_back(entry);
     endInsertRows();
+
+    return journal_.last();
 }
 
 void MessagesModel::log(const QString &log_text)
@@ -162,9 +134,10 @@ QList<PlotDescriptionRaw> &MessagesModel::get_plots()
     return selected_plots_;
 }
 
-void MessagesModel::change_plot_mode()
+void MessagesModel::change_plot_mode(int)
 {
     decoded_ = !decoded_;
+    emit set_plots(decoded_);
 }
 
 void MessagesModel::select_plots(QModelIndex idx)
@@ -174,4 +147,65 @@ void MessagesModel::select_plots(QModelIndex idx)
         selected_plots_.push_back(plot);
 
     emit set_plots(decoded_);
+}
+
+void MessagesModel::save_to_file()
+{
+    QString timestamp = QString::number(QDateTime::currentSecsSinceEpoch());
+
+    if (!QDir(reg_files_dir_).exists())
+        QDir().mkpath(reg_files_dir_);
+
+    QFile msg_reg_file(reg_files_dir_ + "Message_27.1 - " + timestamp + ".reg");
+    QFile plot_reg_file(reg_files_dir_ + "Plots_27.1 - " + timestamp + ".reg");
+
+    if (msg_reg_file.open(QIODevice::WriteOnly) && plot_reg_file.open(QIODevice::WriteOnly))
+    {
+        msg_reg_file.setPermissions(QFileDevice::ReadGroup | QFileDevice::WriteGroup | QFileDevice::ReadOther | QFileDevice::WriteOther);
+        plot_reg_file.setPermissions(QFileDevice::ReadGroup | QFileDevice::WriteGroup | QFileDevice::ReadOther | QFileDevice::WriteOther);
+
+        QTextStream msg_stream(&msg_reg_file);
+        QTextStream plot_stream(&plot_reg_file);
+        //Headers
+        msg_stream << "ID\tProcess Time\tPolarization\tSearch ID\tGain Coefficients\tPlots Number\n";
+        plot_stream << "ID\tReference Time\tChannel ID\tPower\tU\tV\tVariance\tFreqency Start\tFrequency Width\n";
+        // Not thread safe, but journal size can not be less
+        // than read before value and values can not be recolated.
+        int last_idx = journal_.size();
+        for (int idx = 0; idx < last_idx; ++idx)
+        {
+            auto& msg = journal_[idx].raw_msg;
+            msg_stream << journal_[idx].get_id() << "\t"
+                       << msg.process_time << "\t"
+                       << msg.polarization_type << "\t"
+                       << msg.search_area_id << "\t"
+                       << "{ " << msg.signal_amp[0] << " "
+                               << msg.signal_amp[1] << " "
+                               << msg.signal_amp[2] << " "
+                               << msg.signal_amp[3] << " "
+                               << msg.signal_amp[4] << " "
+                               << msg.signal_amp[5] << " "
+                               << msg.signal_amp[6] << " "
+                               << msg.signal_amp[7] << " }\t"
+                       << msg.plots_count << "\n";
+
+            for (std::size_t plot_idx = 0; plot_idx < msg.p.size(); ++plot_idx)
+            {
+                PlotDescription plot = decode(msg.p[plot_idx]);
+
+                plot_stream << journal_[idx].get_id() << "\t"
+                            << plot.referance_time << "\t"
+                            << plot.channel_id << "\t"
+                            << plot.u << "\t"
+                            << plot.v << "\t"
+                            << plot.variance << "\t"
+                            << plot.freq_range_start << "\t"
+                            << plot.freq_range_width << "\n";
+            }
+
+        }
+    }
+    else
+        throw std::runtime_error("Failed to create reg file.");
+
 }

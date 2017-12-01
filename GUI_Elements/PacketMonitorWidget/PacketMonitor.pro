@@ -2,7 +2,7 @@ TEMPLATE = lib
 QT += core gui widgets
 CONFIG += c++14 staticlib
 
-INCLUDEPATH += ../Data_Models/ ../../Packet_Generator
+INCLUDEPATH += ../Data_Models/ ../../Packet_Manager/
 
 MOC_DIR = ../../build
 OBJECTS_DIR = ../../build

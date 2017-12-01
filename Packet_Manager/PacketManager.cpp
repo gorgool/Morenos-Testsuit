@@ -25,10 +25,9 @@ PacketSender::~PacketSender()
 	pcap_close(handle);
 }
 
-void PacketSender::send_packet(const SearchResult_Msg& msg)
+void PacketSender::send_packet(const SearchResult_MsgRaw& msg)
 {
-	auto p = encode(msg);
-	auto size = serialize(p, &data[sizeof(EthernetHeader) + sizeof(SystemHeader) + sizeof(MessageHeader)]);
+    auto size = serialize(msg, &data[sizeof(EthernetHeader) + sizeof(SystemHeader) + sizeof(MessageHeader)]);
 
 	eth_header.type = size + sizeof(EthernetHeader) + sizeof(SystemHeader) + sizeof(MessageHeader);
 	memcpy(&data[0], &eth_header, sizeof(EthernetHeader));
@@ -77,7 +76,7 @@ PacketReceiver::~PacketReceiver()
 	pcap_close(handle);
 }
 
-int PacketReceiver::read_packet(SearchResult_Msg & msg)
+int PacketReceiver::read_packet(SearchResult_MsgRaw & msg)
 {
     auto ret = pcap_next_ex(handle, &desc_header, &data);
 
@@ -99,10 +98,7 @@ int PacketReceiver::read_packet(SearchResult_Msg & msg)
     if ( (*(const std::uint8_t*)(ptr + 1)) != 1)
       throw std::runtime_error("Wrong packet format: message id not 1.");
 
-		SearchResult_MsgRaw temp;
-		deserialize(&data[sizeof(EthernetHeader) + sizeof(SystemHeader) + sizeof(MessageHeader)], temp);
-
-		msg = decode(temp);
+    deserialize(&data[sizeof(EthernetHeader) + sizeof(SystemHeader) + sizeof(MessageHeader)], msg);
 
     return ret;
 }

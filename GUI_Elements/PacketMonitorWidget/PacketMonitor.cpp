@@ -8,11 +8,15 @@ PacketMonitor::PacketMonitor(QWidget *parent) :
     QWidget(parent), model_(nullptr)
 {
     QLabel* title = new QLabel("Packet Monitor", this);
+    title->setFixedHeight(20);
     title->setAlignment(Qt::AlignHCenter);
     title_font_.setBold(true);
     title_font_.setPixelSize(16);
     title_font_.setFamily("Segoe UI Light");
     title->setFont(title_font_);
+
+    decoded_check.setText("Decode plots info");
+    save_button.setText("Save to file...");
 
     QVBoxLayout* v_layout = new QVBoxLayout(this);
     v_layout->setSpacing(5);
@@ -22,12 +26,14 @@ PacketMonitor::PacketMonitor(QWidget *parent) :
     QGridLayout* layout = new QGridLayout;
     v_layout->addLayout(layout);
 
+    layout->addWidget(&decoded_check, 0, 7, 1, 1);
+    layout->addWidget(&save_button, 8, 0, 1, 1);
     // Incoming packets list
     incoming_packets_list_.setFixedWidth(240);
     incoming_packets_list_.setStyleSheet(
                 "QListView::item:selected:active { background-color: grey; color: black;} \
                  QListView::item:selected:!active { background-color: grey; color: black; }");
-    layout->addWidget(&incoming_packets_list_, 0, 0, 2, 1);
+    layout->addWidget(&incoming_packets_list_, 0, 0, 8, 1);
 
     // Center table
     incoming_packets_table_.setSelectionBehavior(QAbstractItemView::SelectRows);
@@ -36,12 +42,12 @@ PacketMonitor::PacketMonitor(QWidget *parent) :
     incoming_packets_table_.setStyleSheet(
                 "QTableView::item:selected:active { selection-background-color: grey; selection-color: black; } \
                  QTableView::item:selected:!active { selection-background-color: grey; selection-color: black; }");
-    layout->addWidget(&incoming_packets_table_, 0, 1, 1, 4);
+    layout->addWidget(&incoming_packets_table_, 0, 1, 7, 4);
 
     // Log window
     log_widget_.setReadOnly(true);
     log_widget_.setFixedHeight(200);
-    layout->addWidget(&log_widget_, 1, 1, 1, 4);
+    layout->addWidget(&log_widget_, 7, 1, 2, 4);
 
     // Plots Info
     plot_view_.setFixedWidth(300 + 10);
@@ -49,7 +55,7 @@ PacketMonitor::PacketMonitor(QWidget *parent) :
     plot_view_.setHeaderLabels(QStringList({"Name", "Value"}));
     plot_view_.setColumnWidth(0, 200);
     plot_view_.setColumnWidth(1, 100);
-    layout->addWidget(&plot_view_, 0, 7, 2, 1);
+    layout->addWidget(&plot_view_, 1, 7, 8, 1);
 }
 
 void PacketMonitor::set_model(MessagesModel *model)
@@ -60,6 +66,8 @@ void PacketMonitor::set_model(MessagesModel *model)
     incoming_packets_list_.setModel(model_->get_list_model());
     incoming_packets_table_.setModel(model_);
 
+    connect(&save_button, SIGNAL(clicked(bool)), model_, SLOT(save_to_file()));
+    connect(&decoded_check, SIGNAL(stateChanged(int)), model_, SLOT(change_plot_mode(int)));
     connect(model_, SIGNAL(log_update(QString)), this, SLOT(append_log(QString)));
     connect(&incoming_packets_list_, SIGNAL(clicked(QModelIndex)), model_, SLOT(select_plots(QModelIndex)));
     connect(&incoming_packets_list_, SIGNAL(clicked(QModelIndex)), this, SLOT(select_table(QModelIndex)));
@@ -83,67 +91,98 @@ void PacketMonitor::display_plots(bool decoded)
 {
     auto& plots = model_->get_plots();
     plot_view_.clear();
-    for(std::size_t idx = 0; idx < plots.size(); ++idx)
+    for(int idx = 0; idx < plots.size(); ++idx)
     {
         QTreeWidgetItem *plotItem = new QTreeWidgetItem(&plot_view_);
+        plotItem->setExpanded(true);
         plotItem->setText(0, "Plot " + QString::number(idx + 1));
 
         // =========== Fields of one plot ================
+        PlotDescription decoded_plot = decode(plots[idx]);
+
         // Referance time
         {
             QTreeWidgetItem *fieldItem = new QTreeWidgetItem();
             fieldItem->setText(0, "Reference time");
-            std::uint64_t ref_time = 0;
-            memcpy(&ref_time, &plots[idx].referance_time[0], 5);
-            fieldItem->setText(1, QString::number(ref_time));
+            if (decoded)
+            {
+                fieldItem->setText(1, QString::number(decoded_plot.referance_time));
+            }
+            else
+            {
+                std::uint64_t ref_time = 0;
+                memcpy(&ref_time, &plots[idx].referance_time[0], 5);
+                fieldItem->setText(1, QString::number(ref_time));
+            }
             plotItem->addChild(fieldItem);
         }
         // Channel ID
         {
             QTreeWidgetItem *fieldItem = new QTreeWidgetItem();
             fieldItem->setText(0, "Channel ID");
-            fieldItem->setText(1, QString::number(plots[idx].channel_id));
+            if (decoded)
+                fieldItem->setText(1, QString::number(decoded_plot.channel_id));
+            else
+                fieldItem->setText(1, QString::number(plots[idx].channel_id));
             plotItem->addChild(fieldItem);
         }
         // Power
         {
             QTreeWidgetItem *fieldItem = new QTreeWidgetItem();
             fieldItem->setText(0, "Power");
-            fieldItem->setText(1, QString::number(plots[idx].power));
+            if (decoded)
+                fieldItem->setText(1, QString::number(decoded_plot.power));
+            else
+                fieldItem->setText(1, QString::number(plots[idx].power));
             plotItem->addChild(fieldItem);
         }
         // U coordinate
         {
             QTreeWidgetItem *fieldItem = new QTreeWidgetItem();
             fieldItem->setText(0, "U coordinate");
-            fieldItem->setText(1, QString::number(plots[idx].u));
+            if (decoded)
+                fieldItem->setText(1, QString::number(decoded_plot.u));
+            else
+                fieldItem->setText(1, QString::number(plots[idx].u));
             plotItem->addChild(fieldItem);
         }
         // V coordinate
         {
             QTreeWidgetItem *fieldItem = new QTreeWidgetItem();
             fieldItem->setText(0, "V coordinate");
-            fieldItem->setText(1, QString::number(plots[idx].v));
+            if (decoded)
+                fieldItem->setText(1, QString::number(decoded_plot.v));
+            else
+                fieldItem->setText(1, QString::number(plots[idx].v));
             plotItem->addChild(fieldItem);
         }
         // Variance
         {
             QTreeWidgetItem *fieldItem = new QTreeWidgetItem();
             fieldItem->setText(0, "Variance");
-            fieldItem->setText(1, QString::number(plots[idx].variance));
+            if (decoded)
+                fieldItem->setText(1, QString::number(decoded_plot.variance));
+            else
+                fieldItem->setText(1, QString::number(plots[idx].variance));
             plotItem->addChild(fieldItem);
         }
         // Frequency
         {
             QTreeWidgetItem *fieldItem = new QTreeWidgetItem();
             fieldItem->setText(0, "Frequency start");
-            fieldItem->setText(1, QString::number(plots[idx].freq_range_start));
+            if (decoded)
+                fieldItem->setText(1, QString::number(decoded_plot.freq_range_start));
+            else
+                fieldItem->setText(1, QString::number(plots[idx].freq_range_start));
             plotItem->addChild(fieldItem);
         }
         {
             QTreeWidgetItem *fieldItem = new QTreeWidgetItem();
             fieldItem->setText(0, "Frequency width");
-            fieldItem->setText(1, QString::number(plots[idx].freq_range_width));
+            if (decoded)
+                fieldItem->setText(1, QString::number(decoded_plot.freq_range_width));
+            else
+                fieldItem->setText(1, QString::number(plots[idx].freq_range_width));
             plotItem->addChild(fieldItem);
         }
     }

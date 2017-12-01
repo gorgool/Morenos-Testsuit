@@ -20,13 +20,13 @@ public:
 	~PacketSender();
 
 	/**
-   * @fn  void PacketSender::send_packet(const SearchResult_Msg& msg);
+   * @fn  void PacketSender::send_packet(const SearchResult_MsgRaw& msg);
    *
    * @brief Sends given message.
    *
    * @param msg Message to be sent.
    */
-	void send_packet(const SearchResult_Msg& msg);
+    void send_packet(const SearchResult_MsgRaw& msg);
 
 private:
 
@@ -60,7 +60,7 @@ public:
 	~PacketReceiver();
 
 	/**
-   * @fn  int PacketReceiver::read_packet(SearchResult_Msg& msg);
+   * @fn  int PacketReceiver::read_packet(SearchResult_MsgRaw& msg);
    *
    * @brief Reading incloming messages. If there are no incoming messages block for 1 millisecond.
    *
@@ -68,7 +68,7 @@ public:
 	 * 
 	 * @return 0 if timeout expired; 1 on success receive.
    */
-    int read_packet(SearchResult_Msg& msg);
+    int read_packet(SearchResult_MsgRaw& msg);
 
 private:
 

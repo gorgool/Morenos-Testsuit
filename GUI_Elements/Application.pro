@@ -10,7 +10,7 @@ INCLUDEPATH += ComposerWidget/ Data_Models/ PlotPositionWidget/ \
 QMAKE_LIBDIR = ../libs/
 LIBS = -lComposer -lData_Models -lPlotPosition -lPortraitPlane \
        -lTargetTable -lPacket_Manager -lpcap -lConfig_Manager \
-       -lboost_filesystem -lboost_system
+       -lboost_filesystem -lboost_system -lPacketMonitor
 
 MOC_DIR = ../build
 OBJECTS_DIR = ../build
