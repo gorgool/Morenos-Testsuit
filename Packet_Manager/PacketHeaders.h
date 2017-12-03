@@ -34,13 +34,13 @@ struct EthernetHeader
 
     unsigned char* ptr = buf;
 
-    memcpy(ptr, &dest[0], 6);
-    ptr += 6;
+    memcpy(ptr, &dest[0], sizeof(dest));
+    ptr += sizeof(dest);
 
-    memcpy(ptr, &source[0], 6);
-    ptr += 6;
+    memcpy(ptr, &source[0], sizeof(source));
+    ptr += sizeof(source);
 
-    memcpy(ptr, &type, 2);
+    memcpy(ptr, &type, sizeof(type));
   }
 };
 
@@ -77,16 +77,16 @@ struct SystemHeader
 
     unsigned char* ptr = buf;
 
-    memcpy(ptr, &command, 2);
-    ptr += 2;
+    memcpy(ptr, &command, sizeof(command));
+    ptr += sizeof(command);
 
-    memcpy(ptr, &frame_id, 2);
-    ptr += 2;
+    memcpy(ptr, &frame_id, sizeof(frame_id));
+    ptr += sizeof(frame_id);
 
-    memcpy(ptr, &packet_id, 4);
-    ptr += 4;
+    memcpy(ptr, &packet_id, sizeof(packet_id));
+    ptr += sizeof(packet_id);
 
-    memcpy(ptr, &packet_chunk_id, 4);
+    memcpy(ptr, &packet_chunk_id, sizeof(packet_chunk_id));
   }
 };
 
@@ -135,27 +135,27 @@ struct MessageHeader
 
     unsigned char* ptr = buf;
 
-    memcpy(ptr, &code, 2);
-    ptr += 2;
+    memcpy(ptr, &code, sizeof(code));
+    ptr += sizeof(code);
 
-    memcpy(ptr, &group_id, 1);
-    ptr += 1;
+    memcpy(ptr, &group_id, sizeof(group_id));
+    ptr += sizeof(group_id);
 
-    memcpy(ptr, &message_id, 1);
-    ptr += 1;
+    memcpy(ptr, &message_id, sizeof(message_id));
+    ptr += sizeof(message_id);
 
-    memcpy(ptr, &msg_lenght, 2);
-    ptr += 2;
+    memcpy(ptr, &msg_lenght, sizeof(msg_lenght));
+    ptr += sizeof(msg_lenght);
 
-    memcpy(ptr, &destination_id, 1);
-    ptr += 1;
+    memcpy(ptr, &destination_id, sizeof(destination_id));
+    ptr += sizeof(destination_id);
 
-    memcpy(ptr, &source_id, 1);
-    ptr += 1;
+    memcpy(ptr, &source_id, sizeof(source_id));
+    ptr += sizeof(source_id);
 
-    memcpy(ptr, &receive_timestamp[0], 5);
-    ptr += 5;
+    memcpy(ptr, &receive_timestamp[0], sizeof(receive_timestamp));
+    ptr += sizeof(receive_timestamp);
 
-    memcpy(ptr, &transmit_timestamp[0], 5);
+    memcpy(ptr, &transmit_timestamp[0], sizeof(transmit_timestamp));
   }
 };

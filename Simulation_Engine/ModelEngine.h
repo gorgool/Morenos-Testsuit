@@ -7,40 +7,58 @@
 #include "EventQueue.h"
 #include "SimulationState.h"
 #include "PacketManager.h"
+#include "ConfigManager.hpp"
 
-/*
-  Model engine. Control execution of the model.
-*/
-
+/**
+ * @class ModelEngine
+ * 
+ * @brief Controls execution and internal state of a model 
+ * 
+ */
 class ModelEngine
 {
-  // Network packets manager.
+  /** @brief Network packets manager. Used for sending 27.1 message. */
   PacketSender sender_;
 
-  // Event queue.
+  /** @brief Event queue. */
   EventQueue ev_queue_;
 
-  // Current modelling time, milliseconds.
+  /** @brief Current modelling time, milliseconds. */
   std::uint64_t model_time_ = 0;
 
-  // Modelling step, milliseconds.
+  /** @brief Modelling step, milliseconds. */
   std::uint64_t time_step_ = 100;
 
+  /** @brief Internal state of the model. */
   EnvironmentState state_;
 
+  /** @brief Flag for start and stop state of execution. */
   std::atomic_bool running_;
 
 public:
 
-  // Constructor.
   ModelEngine() : running_(false) {}
 
-  // Execution of modelling cycle. Blocking.
+  /**
+   * @fn void run();
+   *
+   * @brief Start execution of the model in real time with time_step_. Blocking.
+   */
   void run();
 
-  // Stop modelling execution.
+  /**
+   * @fn void stop();
+   *
+   * @brief Stop execution of the model. Internal state preserved.
+   */
   void stop();
 
-  // Load model events from file.
-  void load_events();
+  /**
+   * @fn void load_events(const ConfigManager::Settings& params);
+   *
+   * @brief Loads events descriptions and execution parameters from ConfigManager settings.
+   *
+   * @param params Reference to config section with events description.
+   */
+  void load_events(const ConfigManager::Settings& params);
 };

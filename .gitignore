@@ -9,3 +9,4 @@ Release
 build
 bin
 .vscode
+*.pdb

@@ -52,7 +52,7 @@ QVariant MessagesModel::data(const QModelIndex &index, int role) const
         case 0:
         {
             quint64 process_time = 0;
-            memcpy(&process_time, &t.raw_msg.process_time[0], 5);
+            memcpy(&process_time, &t.raw_msg.process_time[0], sizeof(t.raw_msg.process_time));
             return process_time;
         }
         case 1:

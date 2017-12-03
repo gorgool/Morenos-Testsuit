@@ -111,7 +111,7 @@ void PacketMonitor::display_plots(bool decoded)
             else
             {
                 std::uint64_t ref_time = 0;
-                memcpy(&ref_time, &plots[idx].referance_time[0], 5);
+                memcpy(&ref_time, &plots[idx].referance_time[0], sizeof(plots[idx].referance_time));
                 fieldItem->setText(1, QString::number(ref_time));
             }
             plotItem->addChild(fieldItem);

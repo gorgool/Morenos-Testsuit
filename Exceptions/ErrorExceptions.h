@@ -21,7 +21,7 @@ public:
 /**
  * @class ConfigException
  *
- * @brief Exception while parsing configuration description.
+ * @brief Exception while parsing configuration files.
  *
  */
 

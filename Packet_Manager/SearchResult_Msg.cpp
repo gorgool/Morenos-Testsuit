@@ -30,29 +30,28 @@ std::uint16_t serialize(const PlotDescriptionRaw & msg, unsigned char * buf)
 
   unsigned char* msg_ptr = buf;
 
-  memcpy(msg_ptr, &msg.referance_time[0], 5);
-  msg_ptr += 5;
+  memcpy(msg_ptr, &msg.referance_time[0], sizeof(msg.referance_time));
+  msg_ptr += sizeof(msg.referance_time);
 
-  memcpy(msg_ptr, &msg.u, 2);
-  msg_ptr += 2;
+  memcpy(msg_ptr, &msg.u, sizeof(msg.u));
+  msg_ptr += sizeof(msg.u);
 
-  memcpy(msg_ptr, &msg.v, 2);
-  msg_ptr += 2;
+  memcpy(msg_ptr, &msg.v, sizeof(msg.v));
+  msg_ptr += sizeof(msg.v);
 
-  memcpy(msg_ptr, &msg.variance, 2);
-  msg_ptr += 2;
+  memcpy(msg_ptr, &msg.variance, sizeof(msg.variance));
+  msg_ptr += sizeof(msg.variance);
 
-  memcpy(msg_ptr, &msg.channel_id, 1);
-  msg_ptr += 1;
+  memcpy(msg_ptr, &msg.channel_id, sizeof(msg.channel_id));
+  msg_ptr += sizeof(msg.channel_id);
 
-  memcpy(msg_ptr, &msg.power, 2);
-  msg_ptr += 2;
+  memcpy(msg_ptr, &msg.power, sizeof(msg.power));
+  msg_ptr += sizeof(msg.power);
 
-  memcpy(msg_ptr, &msg.freq_range_start, 2);
-  msg_ptr += 2;
+  memcpy(msg_ptr, &msg.freq_range_start, sizeof(msg.freq_range_start));
+  msg_ptr += sizeof(msg.freq_range_start);
 
-  memcpy(msg_ptr, &msg.freq_range_width, 2);
-  msg_ptr += 2;
+  memcpy(msg_ptr, &msg.freq_range_width, sizeof(msg.freq_range_width));
 
   return PlotDescriptionRaw::msg_size;
 }
@@ -63,29 +62,28 @@ void deserialize(const unsigned char * const buf, PlotDescriptionRaw & ret)
 
   const unsigned char* msg_ptr = buf;
 
-  memcpy(&ret.referance_time[0], msg_ptr, 5);
-  msg_ptr += 5;
+  memcpy(&ret.referance_time[0], msg_ptr, sizeof(ret.referance_time));
+  msg_ptr += sizeof(ret.referance_time);
 
-  memcpy(&ret.u, msg_ptr, 2);
-  msg_ptr += 2;
+  memcpy(&ret.u, msg_ptr, sizeof(ret.u));
+  msg_ptr += sizeof(ret.u);
 
-  memcpy(&ret.v, msg_ptr, 2);
-  msg_ptr += 2;
+  memcpy(&ret.v, msg_ptr, sizeof(ret.v));
+  msg_ptr += sizeof(ret.v);
 
-  memcpy(&ret.variance, msg_ptr, 2);
-  msg_ptr += 2;
+  memcpy(&ret.variance, msg_ptr, sizeof(ret.variance));
+  msg_ptr += sizeof(ret.variance);
 
-  memcpy(&ret.channel_id, msg_ptr, 1);
-  msg_ptr += 1;
+  memcpy(&ret.channel_id, msg_ptr, sizeof(ret.channel_id));
+  msg_ptr += sizeof(ret.channel_id);
 
-  memcpy(&ret.power, msg_ptr, 2);
-  msg_ptr += 2;
+  memcpy(&ret.power, msg_ptr, sizeof(ret.power));
+  msg_ptr += sizeof(ret.power);
 
-  memcpy(&ret.freq_range_start, msg_ptr, 2);
-  msg_ptr += 2;
+  memcpy(&ret.freq_range_start, msg_ptr, sizeof(ret.freq_range_start));
+  msg_ptr += sizeof(ret.freq_range_start);
 
-  memcpy(&ret.freq_range_width, msg_ptr, 2);
-  msg_ptr += 2;
+  memcpy(&ret.freq_range_width, msg_ptr, sizeof(ret.freq_range_width);
 }
 
 PlotDescription decode(const PlotDescriptionRaw & msg)
@@ -100,7 +98,7 @@ PlotDescription decode(const PlotDescriptionRaw & msg)
   ret.v = msg.v * (1.0 / std::pow(2, 15));
   ret.variance = msg.variance * (1.0 / std::pow(2, 15));
 
-  memcpy(&ret.referance_time, &msg.referance_time[0], 5);
+  memcpy(&ret.referance_time, &msg.referance_time[0], sizeof(msg.referance_time));
 
   return ret;
 }
@@ -117,7 +115,7 @@ PlotDescriptionRaw encode(const PlotDescription & msg)
   ret.v = static_cast<std::uint16_t>(msg.v / (1.0 / std::pow(2, 15)));
   ret.variance = static_cast<std::uint16_t>(msg.variance / (1.0 / std::pow(2, 15)));
 
-  memcpy(&ret.referance_time, &msg.referance_time, 5);
+  memcpy(&ret.referance_time[0], &msg.referance_time, sizeof(ret.referance_time));
 
   return ret;
 }
@@ -126,7 +124,7 @@ bool validate(const PlotDescription & msg)
 {
   try
   {
-	check_value("Referance time", msg.referance_time, [](auto& val) { return val <= std::pow(2, 40); });
+	  check_value("Referance time", msg.referance_time, [](auto& val) { return val <= std::pow(2, 40); });
     check_value("Channel id", msg.channel_id, [](auto& val) { return val > 0 && val < 9 ; });
     check_value("Start of the frequency range", msg.freq_range_start, [](auto& val) { return val >= 0.0 && val <= 115.0; });
     check_value("Width of the frequency range", msg.freq_range_width, [](auto& val) { return val >= 0.0 && val < 115.0; });
@@ -151,23 +149,23 @@ std::uint16_t serialize(const SearchResult_MsgRaw & msg, unsigned char * buf)
 
   unsigned char* msg_ptr = buf;
 
-  memcpy(msg_ptr, &msg.transfer_time[0], 5);
-  msg_ptr += 5;
+  memcpy(msg_ptr, &msg.transfer_time[0], sizeof(msg.transfer_time));
+  msg_ptr += sizeof(msg.transfer_time);
 
-  memcpy(msg_ptr, &msg.process_time[0], 5);
-  msg_ptr += 5;
+  memcpy(msg_ptr, &msg.process_time[0], sizeof(msg.process_time));
+  msg_ptr += sizeof(msg.process_time);
 
-  memcpy(msg_ptr, &msg.polarization_type, 1);
-  msg_ptr += 1;
+  memcpy(msg_ptr, &msg.polarization_type, sizeof(msg.polarization_type));
+  msg_ptr += sizeof(msg.polarization_type);
 
-  memcpy(msg_ptr, &msg.signal_amp[0], 2 * 8);
-  msg_ptr += 2 * 8;
+  memcpy(msg_ptr, &msg.signal_amp[0], sizeof(msg.signal_amp));
+  msg_ptr += sizeof(msg.signal_amp);
 
-  memcpy(msg_ptr, &msg.search_area_id, 1);
-  msg_ptr += 1;
+  memcpy(msg_ptr, &msg.search_area_id, sizeof(msg.search_area_id));
+  msg_ptr += sizeof(msg.search_area_id);
 
-  memcpy(msg_ptr, &msg.plots_count, 1);
-  msg_ptr += 1;
+  memcpy(msg_ptr, &msg.plots_count, sizeof(msg.plots_count));
+  msg_ptr += sizeof(msg.plots_count);
 
   for (std::uint8_t idx = 0; idx < msg.plots_count; ++idx)
   {
@@ -178,7 +176,7 @@ std::uint16_t serialize(const SearchResult_MsgRaw & msg, unsigned char * buf)
     msg_ptr += PlotDescriptionRaw::msg_size;
   }
 
-  return 5 + 5 + 1 + (2 * 8) + 1 + 1 + PlotDescriptionRaw::msg_size * msg.plots_count;
+  return msg_ptr - buf;
 }
 
 void deserialize(const unsigned char * const buf, SearchResult_MsgRaw & ret)
@@ -187,23 +185,23 @@ void deserialize(const unsigned char * const buf, SearchResult_MsgRaw & ret)
 
   const unsigned char* msg_ptr = buf;
 
-  memcpy(&ret.transfer_time[0], msg_ptr, 5);
-  msg_ptr += 5;
+  memcpy(&ret.transfer_time[0], msg_ptr, sizeof(ret.transfer_time));
+  msg_ptr += sizeof(ret.transfer_time);
 
-  memcpy(&ret.process_time[0], msg_ptr, 5);
-  msg_ptr += 5;
+  memcpy(&ret.process_time[0], msg_ptr, sizeof(ret.process_time));
+  msg_ptr += sizeof(ret.process_time);
 
-  memcpy(&ret.polarization_type, msg_ptr, 1);
-  msg_ptr += 1;
+  memcpy(&ret.polarization_type, msg_ptr, sizeof(ret.polarization_type));
+  msg_ptr += sizeof(ret.polarization_type);
 
-  memcpy(&ret.signal_amp[0], msg_ptr, 2 * 8);
-  msg_ptr += 2 * 8;
+  memcpy(&ret.signal_amp[0], msg_ptr, sizeof(ret.signal_amp));
+  msg_ptr += sizeof(ret.signal_amp);
 
-  memcpy(&ret.search_area_id, msg_ptr, 1);
-  msg_ptr += 1;
+  memcpy(&ret.search_area_id, msg_ptr, sizeof(ret.search_area_id));
+  msg_ptr += sizeof(ret.search_area_id);
 
-  memcpy(&ret.plots_count, msg_ptr, 1);
-  msg_ptr += 1;
+  memcpy(&ret.plots_count, msg_ptr, sizeof(ret.plots_count));
+  msg_ptr += sizeof(ret.plots_count);
 
   for (std::uint8_t idx = 0; idx < ret.plots_count; ++idx)
   {
@@ -219,9 +217,9 @@ SearchResult_Msg decode(const SearchResult_MsgRaw & msg)
 {
   SearchResult_Msg ret;
 
-  memcpy(&ret.transfer_time, &msg.transfer_time[0], 5);
+  memcpy(&ret.transfer_time, &msg.transfer_time[0], sizeof(msg.transfer_time));
 
-  memcpy(&ret.process_time, &msg.process_time[0], 5);
+  memcpy(&ret.process_time, &msg.process_time[0], sizeof(msg.process_time));
 
   ret.polarization_type = msg.polarization_type;
   ret.plots_count = msg.plots_count;
@@ -240,9 +238,9 @@ SearchResult_MsgRaw encode(const SearchResult_Msg & msg)
 {
   SearchResult_MsgRaw ret;
 
-  memcpy(&ret.transfer_time, &msg.transfer_time, 5);
+  memcpy(&ret.transfer_time[0], &msg.transfer_time, sizeof(ret.transfer_time));
 
-  memcpy(&ret.process_time, &msg.process_time, 5);
+  memcpy(&ret.process_time[0], &msg.process_time, sizeof(ret.process_time));
 
   ret.polarization_type = msg.polarization_type;
   ret.plots_count = msg.plots_count;

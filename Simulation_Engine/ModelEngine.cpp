@@ -41,56 +41,50 @@ void ModelEngine::stop()
     running_ = false;
 }
 
-void ModelEngine::load_events()
+void ModelEngine::load_events(const ConfigManager::Settings& params)
 {
-        ConfigManager mng;
-        mng.set_path(R"(../etc/)");
-        mng.load_config("simulation");
+    state_.set_gain({0, 0, 0, 0, 0, 0, 0, 0});
+    state_.set_polarization(mng.get_value<std::uint32_t>(params, "polarization"));
+    state_.set_search_id(mng.get_value<std::uint32_t>(params, "search_area_id"));
+    state_.set_uv_limits(
+        mng.get_value<double>(params, "u_left_limit"),
+        mng.get_value<double>(params, "u_right_limit"),
+        mng.get_value<double>(params, "v_left_limit"),
+        mng.get_value<double>(params, "v_right_limit")
+        );
 
-        auto& params = mng.get_section("params");
+    model_time_ = mng.get_value<std::uint64_t>(params, "model_start_time");
+    time_step_ = mng.get_value<std::uint64_t>(params, "model_delta_time");
 
-        state_.set_gain({0, 0, 0, 0, 0, 0, 0, 0});
-        state_.set_polarization(mng.get_value<std::uint32_t>(params, "polarization"));
-        state_.set_search_id(mng.get_value<std::uint32_t>(params, "search_area_id"));
-        state_.set_uv_limits(
-            mng.get_value<double>(params, "u_left_limit"),
-            mng.get_value<double>(params, "u_right_limit"),
-            mng.get_value<double>(params, "v_left_limit"),
-            mng.get_value<double>(params, "v_right_limit")
-            );
+    auto& events = mng.get_section("events");
 
-        model_time_ = mng.get_value<std::uint64_t>(params, "model_start_time");
-        time_step_ = mng.get_value<std::uint64_t>(params, "model_delta_time");
+    auto target_events = mng.get_object_array(events,"target_events");
+    for (auto& ev : target_events)
+    {
+        auto event_type = mng.get_value<std::string>(*ev, "type");
 
-        auto& events = mng.get_section("events");
-
-        auto target_events = mng.get_object_array(events,"target_events");
-        for (auto& ev : target_events)
+        if (event_type == "target_add")
         {
-            auto event_type = mng.get_value<std::string>(*ev, "type");
+            TargetState target;
 
-            if (event_type == "target_add")
-            {
-                TargetState target;
+            target
+                .set_channel(mng.get_value<std::uint32_t>(*ev, "channel_id"))
+                .set_frequency(mng.get_value<double>(*ev, "freq_start"), mng.get_value<double>(*ev, "freq_width"))
+                .set_power(mng.get_value<std::uint32_t>(*ev, "power"))
+                .set_variance(mng.get_value<double>(*ev, "variance"))
+                .set_coordinates(mng.get_value<double>(*ev, "u"), mng.get_value<double>(*ev, "v"),
+                                 mng.get_value<double>(*ev, "u_vel"), mng.get_value<double>(*ev, "v_vel"));
 
-                target
-                    .set_channel(mng.get_value<std::uint32_t>(*ev, "channel_id"))
-                    .set_frequency(mng.get_value<double>(*ev, "freq_start"), mng.get_value<double>(*ev, "freq_width"))
-                    .set_power(mng.get_value<std::uint32_t>(*ev, "power"))
-                    .set_variance(mng.get_value<double>(*ev, "variance"))
-                    .set_coordinates(mng.get_value<double>(*ev, "u"), mng.get_value<double>(*ev, "v"),
-                                     mng.get_value<double>(*ev, "u_vel"), mng.get_value<double>(*ev, "v_vel"));
-
-                ev_queue_.add_event(
-                    Event(mng.get_value<std::uint64_t>(*ev, "trigger_time"),
-                          [target](EnvironmentState& state)
-                          {
-                            state.set_target(target);
-                          }));
-            }
-            else
-            {
-                throw ConfigException("Model Engine: Unknown type of an event.");
-            }
+            ev_queue_.add_event(
+                Event(mng.get_value<std::uint64_t>(*ev, "trigger_time"),
+                      [target](EnvironmentState& state)
+                      {
+                        state.set_target(target);
+                      }));
         }
+        else
+        {
+            throw ConfigException("Model Engine: Unknown type of an event.");
+        }
+    }
 }
