@@ -10,14 +10,18 @@
 #include "SearchResult_Msg.h"
 #include "PacketManager.h"
 #include "ModelEngine.h"
+#include "ConfigManager.hpp"
 
 int main(int argc, const char* argv[])
 {
   try
   {
     ModelEngine engine;
+    ConfigManager mng;
+    mng.set_path(R"(../etc/)");
+    mng.load_config("simulation");
 
-    engine.load_events();
+    engine.load_events(mng);
 
     std::thread th(
     [&]()

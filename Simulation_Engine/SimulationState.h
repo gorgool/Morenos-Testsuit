@@ -17,6 +17,8 @@ class TargetState
 {
 public:
     TargetState();
+    TargetState(const TargetState& obj) = default;
+    TargetState& operator=(TargetState&& obj) = default;
 
     /**
    * @fn TargetState& TargetState::set_coordinates(double u, double v, double u_vel, double v_vel);
@@ -46,6 +48,17 @@ public:
    * @return Referance to this object with updated parameters.
    */
     TargetState& set_channel(std::uint8_t id);
+
+    /**
+   * @fn TargetState& TargetState::set_id(std::uint8_t id);
+   *
+   * @brief Sets ID for target.
+   *
+   * @param id Id of the target.
+   *
+   * @return Referance to this object with updated parameters.
+   */
+    TargetState& set_id(std::uint32_t id);
 
     /**
    * @fn TargetState& TargetState::set_variance(double variance);
@@ -131,10 +144,18 @@ public:
    */
     double get_v() const { return current_v_; }
 
+    /**
+    * @fn TargetState& TargetState::get_id() const;
+    *
+    * @brief Return id of the target.
+    *
+    * @return ID of the target.
+    */
+     std::uint32_t get_id() const { return target_id_; }
 private:
 
     /** @brief Time threshold for time rebinding, milliseconds*/
-    const std::uint64_t delta_threshold_ = 10000;
+    std::uint64_t delta_threshold_ = 10000;
 
     /** @brief Time at which the last advance function have been called, milliseconds. */
     std::uint64_t prev_timestamp_;
@@ -159,6 +180,9 @@ private:
 
     /** @brief Channel ID. */
     std::uint8_t channel_id_;
+
+    /** @brief Target ID. */
+    std::uint32_t target_id_;
 
     /** @brief Variance of the coordinates. */
     double variance_;
@@ -244,6 +268,15 @@ public:
    * @return Referance to this object with updated parameters.
    */
     EnvironmentState& set_target(const TargetState& target);
+
+    /**
+   * @fn void TargetState::remove_target(const std::uint32_t id);
+   *
+   * @brief Removes target with given id from the list.
+   *
+   * @param id ID of the target to be removed from list.
+   */
+    void remove_target(const std::uint32_t id);
 
     /**
    * @fn TargetState& TargetState::set_uv_limits(const double u_left, const double u_right, const double v_left, const double v_right);

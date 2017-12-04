@@ -21,7 +21,7 @@ int main(int argc, char* argv[])
     TargetsModelAdapter* targets_model = new TargetsModelAdapter;
     MessagesModel* messages;
 
-    antenna_model->updateGridParams(0.5, 0.5, 0.02, 10000.0, 1.5e6, 1.5e5);
+    antenna_model->updateGridParams(1.0, 1.0, 0.04, 10000.0, 1.5e6, 1.5e5);
     antenna_model->updateDirection(15.24, 25.02);
 
     std::string res_path;
@@ -104,7 +104,7 @@ int main(int argc, char* argv[])
                     continue;
                 }
 
-                targets_model->update(decoded_msg, 10001, TargetType::Interference);
+                targets_model->update(decoded_msg);
             }
             catch(std::runtime_error& ex)
             {

@@ -10,8 +10,8 @@ class TargetsModelAdapter
 public:
 
   TargetsModelAdapter();
-  TargetsModelAdapter(const SearchResult_Msg& msg, const int id, TargetType type);
-  void update(const SearchResult_Msg& msg, const int id, TargetType type);
+  TargetsModelAdapter(const SearchResult_Msg& msg);
+  void update(const SearchResult_Msg& msg);
   TargetsModel* get_model();
 
 private:

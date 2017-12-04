@@ -1,10 +1,11 @@
 #include "SimulationState.h"
 #include <cmath>
+#include <algorithm>
 
 TargetState::TargetState() :
     prev_timestamp_(0), initial_u_(0.0), initial_v_(0.0), current_u_(0.0),
     current_v_(0.0), u_vel_(0.0), v_vel_(0.0),
-    channel_id_(0), variance_(0.0), power_(0),
+    channel_id_(0), target_id_(0), variance_(0.0), power_(0),
     freq_range_start_(0.0), freq_range_width_(0.0) {}
 
 TargetState & TargetState::set_coordinates(double u, double v, double u_vel, double v_vel)
@@ -28,7 +29,14 @@ TargetState & TargetState::set_channel(std::uint8_t id)
 
     channel_id_ = id;
 
-	return *this;
+    return *this;
+}
+
+TargetState &TargetState::set_id(uint32_t id)
+{
+    target_id_ = id;
+
+    return *this;
 }
 
 TargetState & TargetState::set_variance(double variance)
@@ -165,6 +173,15 @@ EnvironmentState & EnvironmentState::set_target(const TargetState& target)
     targets_.push_back(target);
 
     return *this;
+}
+
+void EnvironmentState::remove_target(const uint32_t id)
+{
+    auto it = std::find_if(targets_.begin(), targets_.end(),
+                           [&](const TargetState& val) { return id == val.get_id(); });
+
+    if (it != targets_.end())
+        targets_.erase(it);
 }
 
 void EnvironmentState::advance(std::uint64_t time)

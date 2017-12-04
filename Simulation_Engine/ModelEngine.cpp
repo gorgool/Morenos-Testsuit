@@ -41,8 +41,10 @@ void ModelEngine::stop()
     running_ = false;
 }
 
-void ModelEngine::load_events(const ConfigManager::Settings& params)
+void ModelEngine::load_events(const ConfigManager& mng)
 {
+    auto& params = mng.get_section("params");
+
     state_.set_gain({0, 0, 0, 0, 0, 0, 0, 0});
     state_.set_polarization(mng.get_value<std::uint32_t>(params, "polarization"));
     state_.set_search_id(mng.get_value<std::uint32_t>(params, "search_area_id"));
@@ -69,6 +71,7 @@ void ModelEngine::load_events(const ConfigManager::Settings& params)
 
             target
                 .set_channel(mng.get_value<std::uint32_t>(*ev, "channel_id"))
+                .set_id(mng.get_value<std::uint32_t>(*ev, "id"))
                 .set_frequency(mng.get_value<double>(*ev, "freq_start"), mng.get_value<double>(*ev, "freq_width"))
                 .set_power(mng.get_value<std::uint32_t>(*ev, "power"))
                 .set_variance(mng.get_value<double>(*ev, "variance"))
@@ -80,6 +83,16 @@ void ModelEngine::load_events(const ConfigManager::Settings& params)
                       [target](EnvironmentState& state)
                       {
                         state.set_target(target);
+                      }));
+        }
+        else if (event_type == "target_remove")
+        {
+            const std::uint32_t id = mng.get_value<std::uint32_t>(*ev, "id");
+            ev_queue_.add_event(
+                Event(mng.get_value<std::uint64_t>(*ev, "trigger_time"),
+                      [id](EnvironmentState& state)
+                      {
+                        state.remove_target(id);
                       }));
         }
         else

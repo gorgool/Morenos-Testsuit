@@ -3,18 +3,22 @@
 TargetsModelAdapter::TargetsModelAdapter()
 {}
 
-TargetsModelAdapter::TargetsModelAdapter(const SearchResult_Msg &msg, const int id, TargetType type)
+TargetsModelAdapter::TargetsModelAdapter(const SearchResult_Msg &msg)
 {
-    update(msg, id, type);
+    update(msg);
 }
 
-void TargetsModelAdapter::update(const SearchResult_Msg &msg, const int id, TargetType type)
+void TargetsModelAdapter::update(const SearchResult_Msg &msg)
 {
-    for (const PlotDescription& t : msg.p)
+    int id = 10001;
+    const TargetType type = TargetType::Interference;
+
+    for (std::size_t idx = 0; idx < msg.p.size(); ++idx)
     {
+        auto& t = msg.p[idx];
         Target target
         {
-            id,
+            id++,
             t.u,
             t.v,
             1000000.0,
@@ -29,6 +33,14 @@ void TargetsModelAdapter::update(const SearchResult_Msg &msg, const int id, Targ
         };
 
         model_.update_target(target);
+    }
+
+    // Remove not updated targets
+    if (msg.p.size() < model_.get_targets().size())
+    {
+        const std::size_t number_of_elements = model_.get_targets().size();
+        for (std::size_t idx = msg.p.size(); idx < number_of_elements; ++idx)
+            model_.remove_target(id++);
     }
 }
 

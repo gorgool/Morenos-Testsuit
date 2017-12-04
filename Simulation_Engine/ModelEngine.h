@@ -54,11 +54,11 @@ public:
   void stop();
 
   /**
-   * @fn void load_events(const ConfigManager::Settings& params);
+   * @fn void load_events(const ConfigManager& params);
    *
    * @brief Loads events descriptions and execution parameters from ConfigManager settings.
    *
    * @param params Reference to config section with events description.
    */
-  void load_events(const ConfigManager::Settings& params);
+  void load_events(const ConfigManager& params);
 };

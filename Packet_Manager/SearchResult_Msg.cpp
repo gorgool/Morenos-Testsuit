@@ -83,7 +83,7 @@ void deserialize(const unsigned char * const buf, PlotDescriptionRaw & ret)
   memcpy(&ret.freq_range_start, msg_ptr, sizeof(ret.freq_range_start));
   msg_ptr += sizeof(ret.freq_range_start);
 
-  memcpy(&ret.freq_range_width, msg_ptr, sizeof(ret.freq_range_width);
+  memcpy(&ret.freq_range_width, msg_ptr, sizeof(ret.freq_range_width));
 }
 
 PlotDescription decode(const PlotDescriptionRaw & msg)
