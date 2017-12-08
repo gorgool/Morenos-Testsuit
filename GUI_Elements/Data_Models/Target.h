@@ -30,7 +30,8 @@ struct Target
 
     PolarizationType polarization;
     int search_area_id;
-    double sigma;
+    double u_sigma;
+    double v_sigma;
     int channel_id;
     double power;
     double freq_start;

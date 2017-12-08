@@ -61,17 +61,18 @@ public:
     TargetState& set_id(std::uint32_t id);
 
     /**
-   * @fn TargetState& TargetState::set_variance(double variance);
+   * @fn TargetState& TargetState::set_variance(double u_variance, double v_variance);
    *
-   * @brief Sets variance of coordinates.
+   * @brief Sets variances of coordinates.
    *
-   * @param variance value of the variance, dimensionless (cosine space).
+   * @param u_variance value of the u coordinate variance, dimensionless (cosine space).
+   * @param v_variance value of the v coordinate variance, dimensionless (cosine space).
    * 
    * @exception std::invalid_argument Thrown if variance out of valid range.
    * 
    * @return Referance to this object with updated parameters.
    */
-    TargetState& set_variance(double variance);
+    TargetState& set_variance(double u_variance, double v_variance);
 
     /**
    * @fn TargetState& TargetState::set_power(std::uint16_t power);
@@ -184,8 +185,11 @@ private:
     /** @brief Target ID. */
     std::uint32_t target_id_;
 
-    /** @brief Variance of the coordinates. */
-    double variance_;
+    /** @brief Variance of the coordinate u. */
+    double u_variance_;
+
+    /** @brief Variance of the coordinate v. */
+    double v_variance_;
 
     /** @brief Reflected power. */
     std::uint16_t power_;

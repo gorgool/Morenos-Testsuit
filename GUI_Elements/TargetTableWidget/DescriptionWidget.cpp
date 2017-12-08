@@ -57,8 +57,10 @@ DescriptionWidget::DescriptionWidget(QWidget *parent) :
     // Coordinates
     label_setup_helper("U", u_coordinate_value_);
     label_setup_helper("V", v_coordinate_value_);
-    // Variance
-    label_setup_helper("Variance", sigma_value_);
+    // U Variance
+    label_setup_helper("U Variance", u_sigma_value_);
+    // V Variance
+    label_setup_helper("V Variance", v_sigma_value_);
     // Range
     label_setup_helper("Slant range", range_);
     // Channel
@@ -103,7 +105,8 @@ void DescriptionWidget::reset()
     search_area_value_.setText(" - ");
     u_coordinate_value_.setText(" - ");
     v_coordinate_value_.setText(" - ");
-    sigma_value_.setText(" - ");
+    u_sigma_value_.setText(" - ");
+    v_sigma_value_.setText(" - ");
     range_.setText(" - ");
     channel_value_.setText(" - ");
     power_value_.setText(" - ");
@@ -136,7 +139,8 @@ void DescriptionWidget::display()
     search_area_value_.setText(QString::number(target_->search_area_id));
     u_coordinate_value_.setText(QString::number(target_->u));
     v_coordinate_value_.setText(QString::number(target_->v));
-    sigma_value_.setText(QString::number(target_->sigma));
+    u_sigma_value_.setText(QString::number(target_->u_sigma));
+    v_sigma_value_.setText(QString::number(target_->v_sigma));
 
     if (target_->type == TargetType::Interference)
         range_.setText(QString::number(target_->r, 'd', 3));

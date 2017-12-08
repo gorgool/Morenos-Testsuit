@@ -168,7 +168,7 @@ void MessagesModel::save_to_file()
         QTextStream plot_stream(&plot_reg_file);
         //Headers
         msg_stream << "ID\tProcess Time\tPolarization\tSearch ID\tGain Coefficients\tPlots Number\n";
-        plot_stream << "ID\tReference Time\tChannel ID\tPower\tU\tV\tVariance\tFreqency Start\tFrequency Width\n";
+        plot_stream << "ID\tReference Time\tChannel ID\tPower\tU\tV\tU Variance\tV Variance\tFreqency Start\tFrequency Width\n";
         // Not thread safe, but journal size can not be less
         // than read before value and values can not be recolated.
         int last_idx = journal_.size();
@@ -198,7 +198,8 @@ void MessagesModel::save_to_file()
                             << plot.channel_id << "\t"
                             << plot.u << "\t"
                             << plot.v << "\t"
-                            << plot.variance << "\t"
+                            << plot.u_var << "\t"
+                            << plot.v_var << "\t"
                             << plot.freq_range_start << "\t"
                             << plot.freq_range_width << "\n";
             }

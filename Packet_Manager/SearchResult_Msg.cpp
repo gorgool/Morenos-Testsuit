@@ -8,7 +8,8 @@
 const std::size_t PlotDescriptionRaw::msg_size = sizeof(PlotDescriptionRaw::referance_time) + 
                                                         sizeof(PlotDescriptionRaw::u) + 
                                                         sizeof(PlotDescriptionRaw::v) + 
-                                                        sizeof(PlotDescriptionRaw::variance) + 
+                                                        sizeof(PlotDescriptionRaw::u_var) +
+                                                        sizeof(PlotDescriptionRaw::v_var) + 
                                                         sizeof(PlotDescriptionRaw::channel_id) + 
                                                         sizeof(PlotDescriptionRaw::power) + 
                                                         sizeof(PlotDescriptionRaw::freq_range_start) + 
@@ -39,8 +40,11 @@ std::uint16_t serialize(const PlotDescriptionRaw & msg, unsigned char * buf)
   memcpy(msg_ptr, &msg.v, sizeof(msg.v));
   msg_ptr += sizeof(msg.v);
 
-  memcpy(msg_ptr, &msg.variance, sizeof(msg.variance));
-  msg_ptr += sizeof(msg.variance);
+  memcpy(msg_ptr, &msg.u_var, sizeof(msg.u_var));
+  msg_ptr += sizeof(msg.u_var);
+
+  memcpy(msg_ptr, &msg.v_var, sizeof(msg.v_var));
+  msg_ptr += sizeof(msg.v_var);
 
   memcpy(msg_ptr, &msg.channel_id, sizeof(msg.channel_id));
   msg_ptr += sizeof(msg.channel_id);
@@ -71,8 +75,11 @@ void deserialize(const unsigned char * const buf, PlotDescriptionRaw & ret)
   memcpy(&ret.v, msg_ptr, sizeof(ret.v));
   msg_ptr += sizeof(ret.v);
 
-  memcpy(&ret.variance, msg_ptr, sizeof(ret.variance));
-  msg_ptr += sizeof(ret.variance);
+  memcpy(&ret.u_var, msg_ptr, sizeof(ret.u_var));
+  msg_ptr += sizeof(ret.u_var);
+
+  memcpy(&ret.v_var, msg_ptr, sizeof(ret.v_var));
+  msg_ptr += sizeof(ret.v_var);
 
   memcpy(&ret.channel_id, msg_ptr, sizeof(ret.channel_id));
   msg_ptr += sizeof(ret.channel_id);
@@ -96,7 +103,8 @@ PlotDescription decode(const PlotDescriptionRaw & msg)
   ret.power = msg.power;
   ret.u = msg.u * (1.0 / std::pow(2, 15));
   ret.v = msg.v * (1.0 / std::pow(2, 15));
-  ret.variance = msg.variance * (1.0 / std::pow(2, 15));
+  ret.u_var = msg.u_var * (1.0 / std::pow(2, 15));
+  ret.v_var = msg.v_var * (1.0 / std::pow(2, 15));
 
   memcpy(&ret.referance_time, &msg.referance_time[0], sizeof(msg.referance_time));
 
@@ -113,7 +121,8 @@ PlotDescriptionRaw encode(const PlotDescription & msg)
   ret.power = static_cast<std::uint16_t>(msg.power);
   ret.u = static_cast<std::uint16_t>(msg.u / (1.0 / std::pow(2, 15)));
   ret.v = static_cast<std::uint16_t>(msg.v / (1.0 / std::pow(2, 15)));
-  ret.variance = static_cast<std::uint16_t>(msg.variance / (1.0 / std::pow(2, 15)));
+  ret.u_var = static_cast<std::uint16_t>(msg.u_var / (1.0 / std::pow(2, 15)));
+  ret.v_var = static_cast<std::uint16_t>(msg.v_var / (1.0 / std::pow(2, 15)));
 
   memcpy(&ret.referance_time[0], &msg.referance_time, sizeof(ret.referance_time));
 
@@ -132,7 +141,8 @@ bool validate(const PlotDescription & msg)
     check_value("Referance time", msg.referance_time, [](auto& val) { return val >= 0 && val <= (std::pow(2, 40) - 1); });
     check_value("U angle", msg.u, [](auto& val) { return val >= -1.0 && val <= 1.0; });
     check_value("V angle", msg.v, [](auto& val) { return val >= -1.0 && val <= 1.0; });
-    check_value("Variance", msg.variance, [](auto& val) { return val >= 0.0 && val <= 1.0; });
+    check_value("U variance", msg.u_var, [](auto& val) { return val >= 0.0 && val <= 1.0; });
+    check_value("V variance", msg.v_var, [](auto& val) { return val >= 0.0 && val <= 1.0; });
    
     return true;
   }

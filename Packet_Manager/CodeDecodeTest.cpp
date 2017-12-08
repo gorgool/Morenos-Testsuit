@@ -17,6 +17,7 @@ void CodeDecodeTest()
 			1154,
 			421,
 			110,
+			110,
 			2,
 			12453,
 			956,
@@ -53,7 +54,10 @@ void CodeDecodeTest()
 		if (msg.v != msg2.v)
 			fail = true;
 
-		if (msg.variance != msg2.variance)
+		if (msg.u_var != msg2.u_var)
+			fail = true;
+
+		if (msg.v_var != msg2.v_var)
 			fail = true;
 
 		for (size_t i = 0; i < 5; i++)
@@ -104,6 +108,7 @@ void CodeDecodeTest()
 					1154,
 					421,
 					110,
+					110,
 					2,
 					12453,
 					956,
@@ -121,6 +126,7 @@ void CodeDecodeTest()
 					1154,
 					4021,
 					1010,
+					1101,
 					8,
 					12530,
 					56,
@@ -188,7 +194,10 @@ void CodeDecodeTest()
 			if (msg.p[i].v != msg2.p[i].v)
 				fail = true;
 
-			if (msg.p[i].variance != msg2.p[i].variance)
+			if (msg.p[i].u_var != msg2.p[i].u_var)
+				fail = true;
+			
+			if (msg.p[i].v_var != msg2.p[i].v_var)
 				fail = true;
 
 			for (size_t j = 0; j < 5; j++)

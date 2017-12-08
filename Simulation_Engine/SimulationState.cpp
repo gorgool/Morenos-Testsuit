@@ -5,8 +5,8 @@
 TargetState::TargetState() :
     prev_timestamp_(0), initial_u_(0.0), initial_v_(0.0), current_u_(0.0),
     current_v_(0.0), u_vel_(0.0), v_vel_(0.0),
-    channel_id_(0), target_id_(0), variance_(0.0), power_(0),
-    freq_range_start_(0.0), freq_range_width_(0.0) {}
+    channel_id_(0), target_id_(0), u_variance_(0.0), v_variance_(0.0),
+    power_(0), freq_range_start_(0.0), freq_range_width_(0.0) {}
 
 TargetState & TargetState::set_coordinates(double u, double v, double u_vel, double v_vel)
 {
@@ -39,11 +39,13 @@ TargetState &TargetState::set_id(uint32_t id)
     return *this;
 }
 
-TargetState & TargetState::set_variance(double variance)
+TargetState & TargetState::set_variance(double u_variance, double v_variance)
 {
-	if (std::abs(variance) > 1.0) throw std::invalid_argument("variance is too large.");
+	if (std::abs(u_variance) > 1.0) throw std::invalid_argument("u variance is too large.");
+    if (std::abs(v_variance) > 1.0) throw std::invalid_argument("v variance is too large.");
 
-    variance_ = variance;
+    u_variance_ = u_variance;
+    v_variance_ = v_variance;
 
 	return *this;
 }
@@ -100,7 +102,8 @@ PlotDescription TargetState::get_message() const
     ret.power = power_;
     ret.u = current_u_;
     ret.v = current_v_;
-    ret.variance = variance_;
+    ret.u_var = u_variance_;
+    ret.v_var = v_variance_;
     ret.referance_time = prev_timestamp_;
 
 	return ret;

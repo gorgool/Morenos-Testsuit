@@ -15,25 +15,28 @@ struct PlotDescriptionRaw
   std::uint8_t referance_time[5] = {0, 0, 0, 0, 0};
 
   /** @brief Azimuth angle in cosine space. */
-  std::int16_t u = 0;
+  std::int32_t u = 0;
 
   /** @brief Elevation angle in cosine space. */
-  std::int16_t v = 0;
+  std::int32_t v = 0;
 
-  /** @brief Varianve of u and v. */
-  std::uint16_t variance = 0;
+  /** @brief Varianve of u. */
+  std::uint32_t u_var = 0;
+
+  /** @brief Varianve of v. */
+  std::uint32_t v_var = 0;
 
   /** @brief Id of the central channel assosiated with the current plot. */
   std::uint8_t channel_id = 0;
 
   /** @brief The logarithm of the reflected power from the current plot. */
-  std::uint16_t power = 0;
+  std::uint32_t power = 0;
 
   /** @brief Begin of the frequency range. */
-  std::uint16_t freq_range_start = 0;
+  std::uint32_t freq_range_start = 0;
 
   /** @brief The width of the frequency range, starting from freq_range_start. */
-  std::uint16_t freq_range_width = 0;
+  std::uint32_t freq_range_width = 0;
 
   /** @brief Size of the message. */
   const static std::size_t msg_size;
@@ -56,8 +59,11 @@ struct PlotDescription
   /** @brief Elevation angle in cosine space, dimensionless. */
   double v = 0.0;
 
-  /** @brief Varianve of u and v, dimensionless. */
-  double variance = 0.0;
+  /** @brief Varianve of u, dimensionless. */
+  double u_var = 0.0;
+
+  /** @brief Varianve of v, dimensionless. */
+  double v_var = 0.0;
 
   /** @brief Id of the central channel assosiated with the current plot, dimensionless. */
   std::uint8_t channel_id = 0;

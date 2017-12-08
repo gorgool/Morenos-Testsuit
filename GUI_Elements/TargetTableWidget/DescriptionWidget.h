@@ -47,7 +47,8 @@ private:
     QLabel search_area_value_;
     QLabel u_coordinate_value_;
     QLabel v_coordinate_value_;
-    QLabel sigma_value_;
+    QLabel u_sigma_value_;
+    QLabel v_sigma_value_;
     QLabel range_;
     QLabel channel_value_;
     QLabel power_value_;

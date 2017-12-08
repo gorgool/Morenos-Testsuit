@@ -156,14 +156,24 @@ void PacketMonitor::display_plots(bool decoded)
                 fieldItem->setText(1, QString::number(plots[idx].v));
             plotItem->addChild(fieldItem);
         }
-        // Variance
+        // U Variance
         {
             QTreeWidgetItem *fieldItem = new QTreeWidgetItem();
-            fieldItem->setText(0, "Variance");
+            fieldItem->setText(0, "U variance");
             if (decoded)
-                fieldItem->setText(1, QString::number(decoded_plot.variance));
+                fieldItem->setText(1, QString::number(decoded_plot.u_var));
             else
-                fieldItem->setText(1, QString::number(plots[idx].variance));
+                fieldItem->setText(1, QString::number(plots[idx].u_var));
+            plotItem->addChild(fieldItem);
+        }
+        // V Variance
+        {
+            QTreeWidgetItem *fieldItem = new QTreeWidgetItem();
+            fieldItem->setText(0, "V variance");
+            if (decoded)
+                fieldItem->setText(1, QString::number(decoded_plot.v_var));
+            else
+                fieldItem->setText(1, QString::number(plots[idx].v_var));
             plotItem->addChild(fieldItem);
         }
         // Frequency

@@ -74,7 +74,7 @@ void ModelEngine::load_events(const ConfigManager& mng)
                 .set_id(mng.get_value<std::uint32_t>(*ev, "id"))
                 .set_frequency(mng.get_value<double>(*ev, "freq_start"), mng.get_value<double>(*ev, "freq_width"))
                 .set_power(mng.get_value<std::uint32_t>(*ev, "power"))
-                .set_variance(mng.get_value<double>(*ev, "variance"))
+                .set_variance(mng.get_value<double>(*ev, "u_variance"), mng.get_value<double>(*ev, "v_variance"))
                 .set_coordinates(mng.get_value<double>(*ev, "u"), mng.get_value<double>(*ev, "v"),
                                  mng.get_value<double>(*ev, "u_vel"), mng.get_value<double>(*ev, "v_vel"));
 
