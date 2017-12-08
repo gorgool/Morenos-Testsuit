@@ -116,13 +116,13 @@ PlotDescriptionRaw encode(const PlotDescription & msg)
   PlotDescriptionRaw ret;
 
   ret.channel_id = msg.channel_id;
-  ret.freq_range_start = static_cast<std::uint16_t>(msg.freq_range_start / (115.0 / std::pow(2, 10)));
-  ret.freq_range_width = static_cast<std::uint16_t>(msg.freq_range_width / (115.0 / std::pow(2, 10)));
-  ret.power = static_cast<std::uint16_t>(msg.power);
-  ret.u = static_cast<std::uint16_t>(msg.u / (1.0 / std::pow(2, 15)));
-  ret.v = static_cast<std::uint16_t>(msg.v / (1.0 / std::pow(2, 15)));
-  ret.u_var = static_cast<std::uint16_t>(msg.u_var / (1.0 / std::pow(2, 15)));
-  ret.v_var = static_cast<std::uint16_t>(msg.v_var / (1.0 / std::pow(2, 15)));
+  ret.freq_range_start = static_cast<std::uint32_t>(msg.freq_range_start / (115.0 / std::pow(2, 10)));
+  ret.freq_range_width = static_cast<std::uint32_t>(msg.freq_range_width / (115.0 / std::pow(2, 10)));
+  ret.power = static_cast<std::uint32_t>(msg.power);
+  ret.u = static_cast<std::int32_t>(msg.u / (1.0 / std::pow(2, 15)));
+  ret.v = static_cast<std::int32_t>(msg.v / (1.0 / std::pow(2, 15)));
+  ret.u_var = static_cast<std::uint32_t>(msg.u_var / (1.0 / std::pow(2, 15)));
+  ret.v_var = static_cast<std::uint32_t>(msg.v_var / (1.0 / std::pow(2, 15)));
 
   memcpy(&ret.referance_time[0], &msg.referance_time, sizeof(ret.referance_time));
 
@@ -133,7 +133,7 @@ bool validate(const PlotDescription & msg)
 {
   try
   {
-	  check_value("Referance time", msg.referance_time, [](auto& val) { return val <= std::pow(2, 40); });
+    check_value("Referance time", msg.referance_time, [](auto& val) { return val <= std::pow(2, 40); });
     check_value("Channel id", msg.channel_id, [](auto& val) { return val > 0 && val < 9 ; });
     check_value("Start of the frequency range", msg.freq_range_start, [](auto& val) { return val >= 0.0 && val <= 115.0; });
     check_value("Width of the frequency range", msg.freq_range_width, [](auto& val) { return val >= 0.0 && val < 115.0; });
@@ -269,8 +269,8 @@ bool validate(const SearchResult_Msg & msg)
 {
   try
   {
-	  check_value("Transfer time", msg.transfer_time, [](auto& val) { return val <= std::pow(2, 40); });
-	  check_value("Process time", msg.process_time, [](auto& val) { return val <= std::pow(2, 40); });
+    check_value("Transfer time", msg.transfer_time, [](auto& val) { return val <= std::pow(2, 40); });
+    check_value("Process time", msg.process_time, [](auto& val) { return val <= std::pow(2, 40); });
     check_value("Polarization type", msg.polarization_type, [](auto& val) { return val == 0 || val == 1; });
     check_value("Signal gain", msg.signal_amp, [](auto& val) 
     { 

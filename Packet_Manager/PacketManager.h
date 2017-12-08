@@ -37,10 +37,10 @@ private:
 	EthernetHeader eth_header;
 
 	/** @brief Custom protocol system header. */
-  SystemHeader sys_header;
+    SystemHeader sys_header;
 
 	/** @brief Custom protocol message header. */
-  MessageHeader msg_header;
+    MessageHeader msg_header;
 
 	/** @brief Buffer for message raw data. */
 	unsigned char data[1500];
@@ -82,14 +82,14 @@ private:
 	EthernetHeader eth_header;
 
 	/** @brief Custom protocol system header. */
-  SystemHeader sys_header;
+    SystemHeader sys_header;
 
 	/** @brief Custom protocol message header. */
-  MessageHeader msg_header;
+    MessageHeader msg_header;
 
 	/** @brief Pointer to pcap internal message buffer. */
 	const unsigned char *data;
 
 	/** @brief Buffer for message raw data. */
-  unsigned char payload[1500];
+    unsigned char payload[1500];
 };

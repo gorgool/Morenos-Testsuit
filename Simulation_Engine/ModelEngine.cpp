@@ -29,7 +29,8 @@ void ModelEngine::run()
             return;
         }
 
-        sender_.send_packet(encode(msg));
+        auto raw_msg = encode(msg);
+        sender_.send_packet(raw_msg);
 
         model_time_ += time_step_;
         std::this_thread::sleep_for(std::chrono::milliseconds(time_step_));

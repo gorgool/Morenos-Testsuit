@@ -17,7 +17,7 @@ void SerializeDeserializaTest()
 			1154,
 			421,
 			110,
-      123,
+            123,
 			2,
 			12453,
 			956,
@@ -27,7 +27,7 @@ void SerializeDeserializaTest()
     unsigned char buf[1500];
     if (PlotDescriptionRaw::msg_size != serialize(msg, buf))
     {
-      std::cout << "Serialize Deserialize Test - FAIL.\n";
+      std::cout << "Serialize Deserialize Test #1 - FAIL.\n";
       return;
     }
 
@@ -62,15 +62,15 @@ void SerializeDeserializaTest()
 
     if(fail)
     {
-      std::cout << "Serialize Deserialize Test - FAIL.\n";
+      std::cout << "Serialize Deserialize Test #1 - FAIL.\n";
       return;
     }
   }
 
   // Test case #2
   {
-    // Size = 29 + 2*30 = 89
-    const std::uint16_t msg_size = 89;
+    // Size = 29 + 2*34 = 97
+    const std::uint16_t msg_size = 97;
     SearchResult_MsgRaw msg
 		{
 			{
@@ -134,13 +134,13 @@ void SerializeDeserializaTest()
     unsigned char buf[1500];
     if (serialize(msg, buf) != msg_size)
     {
-      std::cout << "Serialize Deserialize Test - FAIL.\n";
+      std::cout << "Serialize Deserialize Test #2 - FAIL.\n";
       return;
     }
 
     if (msg.size() != msg_size)
     {
-      std::cout << "Serialize Deserialize Test - FAIL.\n";
+      std::cout << "Serialize Deserialize Test #2 - FAIL.\n";
       return;
     }
 
@@ -208,7 +208,7 @@ void SerializeDeserializaTest()
 
     if(fail)
     {
-      std::cout << "Serialize Deserialize Test - FAIL.\n";
+      std::cout << "Serialize Deserialize Test #2 - FAIL.\n";
       return;
     }
   }

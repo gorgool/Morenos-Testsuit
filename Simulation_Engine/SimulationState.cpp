@@ -106,6 +106,8 @@ PlotDescription TargetState::get_message() const
     ret.v_var = v_variance_;
     ret.referance_time = prev_timestamp_;
 
+    validate(ret);
+
 	return ret;
 }
 
@@ -216,6 +218,8 @@ SearchResult_Msg EnvironmentState::get_message() const
 
     for (auto t : targets_)
 		ret.p.push_back(t.get_message());
+
+    validate(ret);
 
 	return ret;
 }

@@ -7,6 +7,7 @@ MessagesListModel::MessagesListModel()
 
 int MessagesListModel::rowCount(const QModelIndex &parent) const
 {
+    Q_UNUSED(parent);
     return data_.size();
 }
 

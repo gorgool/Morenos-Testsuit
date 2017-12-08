@@ -100,7 +100,7 @@ int main(int argc, char* argv[])
                 auto decoded_msg = decode(msg);
                 if (validate(decoded_msg) == false)
                 {
-                    messages->log("Message validation failed. ID : " + e.get_id());
+                    messages->log("Message validation failed. ID : " + QString::number(e.get_id()));
                     continue;
                 }
 

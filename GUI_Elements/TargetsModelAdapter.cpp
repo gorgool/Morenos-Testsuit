@@ -37,7 +37,7 @@ void TargetsModelAdapter::update(const SearchResult_Msg &msg)
     }
 
     // Remove not updated targets
-    if (msg.p.size() < model_.get_targets().size())
+    if (msg.p.size() < static_cast<std::size_t>(model_.get_targets().size()))
     {
         const std::size_t number_of_elements = model_.get_targets().size();
         for (std::size_t idx = msg.p.size(); idx < number_of_elements; ++idx)
