@@ -19,6 +19,7 @@ struct EthernetHeader
   std::uint8_t source[6];
 
   /** @brief Type of the protocol. */
+  // 0x2020
   std::uint16_t type = 0;
 
  /**
@@ -53,12 +54,18 @@ struct EthernetHeader
 struct SystemHeader
 {
   /** @brief Custom protocol command.*/
+  // 1 byte
   std::uint16_t command = 0;
 
+  // 2 byte
+  // lenght of System header and all messages
+
   /** @brief Custom protocol id of the frame. */
+  // packet
   std::uint16_t frame_id = 0;
 
   /** @brief Custom protocol id of the packet. */
+  // block
   std::uint32_t packet_id = 0;
 
   /** @brief Custom protocol id of part of the packet. */
@@ -99,6 +106,7 @@ struct SystemHeader
 struct MessageHeader
 {
   /** @brief Custom protocol special code. Must be 0x5555. */
+  // Not
   std::uint16_t code = 0x5555;
 
   /** @brief Custom protocol id of the message group. */
