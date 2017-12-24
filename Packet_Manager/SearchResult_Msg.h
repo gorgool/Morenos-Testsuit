@@ -91,6 +91,19 @@ struct PlotDescription
 std::uint16_t serialize(const PlotDescriptionRaw& msg, unsigned char* buf);
 
 /**
+   * @fn  std::uint16_t serialize_to_network(const PlotDescriptionRaw& msg, unsigned char* buf);
+   *
+   * @brief Serialize given message in buffer. Convert all integer fields into network byte order (Big endian).
+   *
+   * @param msg Reference to message.
+   * @param msg Pointer to buffer to serialize into. Terminate on null.
+     *
+     * @return Size of the serialized message in bytes.
+   */
+std::uint16_t serialize_to_network(const PlotDescriptionRaw& msg, unsigned char* buf);
+
+
+/**
    * @fn  void deserialize(const unsigned char* const buf, PlotDescriptionRaw& ret);
    *
    * @brief Deserialize given buffer in the message struct.
@@ -100,6 +113,18 @@ std::uint16_t serialize(const PlotDescriptionRaw& msg, unsigned char* buf);
 	 * 
    */
 void deserialize(const unsigned char* const buf, PlotDescriptionRaw& ret);
+
+/**
+   * @fn  void deserialize(const unsigned char* const buf, PlotDescriptionRaw& ret);
+   *
+   * @brief Deserialize given buffer in the message struct. Convert all interger fields from network byte
+   *        order (big endian) to native byte order.
+   *
+   * @param msg Reference to message, where the result to be write in.
+   * @param buf Pointer to buffer with data.  Terminate on null.
+     *
+   */
+void deserialize_from_network(const unsigned char* const buf, PlotDescriptionRaw& ret);
 
 /**
    * @fn  PlotDescription decode(const PlotDescriptionRaw& msg);
@@ -213,6 +238,18 @@ struct SearchResult_Msg
 std::uint16_t serialize(const SearchResult_MsgRaw& msg, unsigned char* buf);
 
 /**
+   * @fn  std::uint16_t serialize(const SearchResult_MsgRaw& msg, unsigned char* buf);
+   *
+   * @brief Serialize given message in buffer. Convert all integer fields into network byte order (Big endian).
+   *
+   * @param msg Reference to message.
+   * @param msg Pointer to buffer to serialize into. Terminate on null.
+     *
+     * @return Size of the serialized message in bytes.
+   */
+std::uint16_t serialize_to_network(const SearchResult_MsgRaw& msg, unsigned char* buf);
+
+/**
    * @fn  void deserialize(const unsigned char* const buf, SearchResult_MsgRaw& ret);
    *
    * @brief Deserialize given buffer in the message struct.
@@ -222,6 +259,18 @@ std::uint16_t serialize(const SearchResult_MsgRaw& msg, unsigned char* buf);
 	 * 
    */
 void deserialize(const unsigned char* const buf, SearchResult_MsgRaw& ret);
+
+/**
+   * @fn  void deserialize(const unsigned char* const buf, SearchResult_MsgRaw& ret);
+   *
+   * @brief Deserialize given buffer in the message struct. Convert all interger fields from network byte
+   *        order (big endian) to native byte order.
+   *
+   * @param msg Reference to message, where the result to be write in.
+   * @param buf Pointer to buffer with data.  Terminate on null.
+     *
+   */
+void deserialize_from_network(const unsigned char* const buf, SearchResult_MsgRaw& ret);
 
 /**
    * @fn  SearchResult_Msg decode(const SearchResult_MsgRaw& msg);

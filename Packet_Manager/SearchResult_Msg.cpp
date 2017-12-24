@@ -4,6 +4,7 @@
 #include <exception>
 #include <cmath>
 #include <cstring>
+#include <boost/endian/conversion.hpp>
 
 const std::size_t PlotDescriptionRaw::msg_size = sizeof(PlotDescriptionRaw::referance_time) + 
                                                         sizeof(PlotDescriptionRaw::u) + 
@@ -25,7 +26,7 @@ static void check_value(const std::string& value_name, const ValueType& value, P
   }
 }
 
-std::uint16_t serialize(const PlotDescriptionRaw & msg, unsigned char * buf)
+uint16_t serialize(const PlotDescriptionRaw &msg, unsigned char *buf)
 {
   assert(buf != nullptr);
 
@@ -35,6 +36,7 @@ std::uint16_t serialize(const PlotDescriptionRaw & msg, unsigned char * buf)
   msg_ptr += sizeof(msg.referance_time);
 
   memcpy(msg_ptr, &msg.u, sizeof(msg.u));
+
   msg_ptr += sizeof(msg.u);
 
   memcpy(msg_ptr, &msg.v, sizeof(msg.v));
@@ -56,6 +58,51 @@ std::uint16_t serialize(const PlotDescriptionRaw & msg, unsigned char * buf)
   msg_ptr += sizeof(msg.freq_range_start);
 
   memcpy(msg_ptr, &msg.freq_range_width, sizeof(msg.freq_range_width));
+
+  return PlotDescriptionRaw::msg_size;
+}
+
+std::uint16_t serialize_to_network(const PlotDescriptionRaw & msg, unsigned char * buf)
+{
+  assert(buf != nullptr);
+
+  unsigned char* msg_ptr = buf;
+
+  memcpy(msg_ptr, &msg.referance_time[0], sizeof(msg.referance_time));
+  if (boost::endian::order::native == boost::endian::order::little)
+    std::reverse(&msg_ptr[0], &msg_ptr[sizeof(msg.referance_time)]);
+  msg_ptr += sizeof(msg.referance_time);
+
+  memcpy(msg_ptr, &msg.u, sizeof(msg.u));
+  boost::endian::native_to_big_inplace(*reinterpret_cast<decltype(msg.u)*>(msg_ptr));
+  msg_ptr += sizeof(msg.u);
+
+  memcpy(msg_ptr, &msg.v, sizeof(msg.v));
+  boost::endian::native_to_big_inplace(*reinterpret_cast<decltype(msg.v)*>(msg_ptr));
+  msg_ptr += sizeof(msg.v);
+
+  memcpy(msg_ptr, &msg.u_var, sizeof(msg.u_var));
+  boost::endian::native_to_big_inplace(*reinterpret_cast<decltype(msg.u_var)*>(msg_ptr));
+  msg_ptr += sizeof(msg.u_var);
+
+  memcpy(msg_ptr, &msg.v_var, sizeof(msg.v_var));
+  boost::endian::native_to_big_inplace(*reinterpret_cast<decltype(msg.v_var)*>(msg_ptr));
+  msg_ptr += sizeof(msg.v_var);
+
+  memcpy(msg_ptr, &msg.channel_id, sizeof(msg.channel_id));
+  boost::endian::native_to_big_inplace(*reinterpret_cast<decltype(msg.channel_id)*>(msg_ptr));
+  msg_ptr += sizeof(msg.channel_id);
+
+  memcpy(msg_ptr, &msg.power, sizeof(msg.power));
+  boost::endian::native_to_big_inplace(*reinterpret_cast<decltype(msg.power)*>(msg_ptr));
+  msg_ptr += sizeof(msg.power);
+
+  memcpy(msg_ptr, &msg.freq_range_start, sizeof(msg.freq_range_start));
+  boost::endian::native_to_big_inplace(*reinterpret_cast<decltype(msg.freq_range_start)*>(msg_ptr));
+  msg_ptr += sizeof(msg.freq_range_start);
+
+  memcpy(msg_ptr, &msg.freq_range_width, sizeof(msg.freq_range_width));
+  boost::endian::native_to_big_inplace(*reinterpret_cast<decltype(msg.freq_range_width)*>(msg_ptr));
 
   return PlotDescriptionRaw::msg_size;
 }
@@ -92,6 +139,50 @@ void deserialize(const unsigned char * const buf, PlotDescriptionRaw & ret)
 
   memcpy(&ret.freq_range_width, msg_ptr, sizeof(ret.freq_range_width));
 }
+
+void deserialize_from_network(const unsigned char * const buf, PlotDescriptionRaw &ret)
+{
+  assert(buf != nullptr);
+
+  const unsigned char* msg_ptr = buf;
+
+  memcpy(&ret.referance_time[0], msg_ptr, sizeof(ret.referance_time));
+  if (boost::endian::order::native == boost::endian::order::little)
+    std::reverse(&ret.referance_time[0], &ret.referance_time[sizeof(ret.referance_time)]);
+  msg_ptr += sizeof(ret.referance_time);
+
+  memcpy(&ret.u, msg_ptr, sizeof(ret.u));
+  boost::endian::big_to_native_inplace(ret.u);
+  msg_ptr += sizeof(ret.u);
+
+  memcpy(&ret.v, msg_ptr, sizeof(ret.v));
+  boost::endian::big_to_native_inplace(ret.v);
+  msg_ptr += sizeof(ret.v);
+
+  memcpy(&ret.u_var, msg_ptr, sizeof(ret.u_var));
+  boost::endian::big_to_native_inplace(ret.u_var);
+  msg_ptr += sizeof(ret.u_var);
+
+  memcpy(&ret.v_var, msg_ptr, sizeof(ret.v_var));
+  boost::endian::big_to_native_inplace(ret.v_var);
+  msg_ptr += sizeof(ret.v_var);
+
+  memcpy(&ret.channel_id, msg_ptr, sizeof(ret.channel_id));
+  boost::endian::big_to_native_inplace(ret.channel_id);
+  msg_ptr += sizeof(ret.channel_id);
+
+  memcpy(&ret.power, msg_ptr, sizeof(ret.power));
+  boost::endian::big_to_native_inplace(ret.power);
+  msg_ptr += sizeof(ret.power);
+
+  memcpy(&ret.freq_range_start, msg_ptr, sizeof(ret.freq_range_start));
+  boost::endian::big_to_native_inplace(ret.freq_range_start);
+  msg_ptr += sizeof(ret.freq_range_start);
+
+  memcpy(&ret.freq_range_width, msg_ptr, sizeof(ret.freq_range_width));
+  boost::endian::big_to_native_inplace(ret.freq_range_width);
+}
+
 
 PlotDescription decode(const PlotDescriptionRaw & msg)
 {
@@ -189,6 +280,53 @@ std::uint16_t serialize(const SearchResult_MsgRaw & msg, unsigned char * buf)
   return msg_ptr - buf;
 }
 
+uint16_t serialize_to_network(const SearchResult_MsgRaw &msg, unsigned char *buf)
+{
+  assert(buf != nullptr);
+
+  unsigned char* msg_ptr = buf;
+
+  memcpy(msg_ptr, &msg.transfer_time[0], sizeof(msg.transfer_time));
+  if (boost::endian::order::native == boost::endian::order::little)
+    std::reverse(&msg_ptr[0], &msg_ptr[sizeof(msg.transfer_time)]);
+  msg_ptr += sizeof(msg.transfer_time);
+
+  memcpy(msg_ptr, &msg.process_time[0], sizeof(msg.process_time));
+  if (boost::endian::order::native == boost::endian::order::little)
+    std::reverse(&msg_ptr[0], &msg_ptr[sizeof(msg.process_time)]);
+  msg_ptr += sizeof(msg.process_time);
+
+  memcpy(msg_ptr, &msg.polarization_type, sizeof(msg.polarization_type));
+  boost::endian::native_to_big_inplace(*reinterpret_cast<decltype(msg.polarization_type)*>(msg_ptr));
+  msg_ptr += sizeof(msg.polarization_type);
+
+  for (std::size_t idx = 0; idx < sizeof(msg.signal_amp) / sizeof(msg.signal_amp[0]); ++idx)
+  {
+    auto temp = boost::endian::native_to_big(msg.signal_amp[idx]);
+    memcpy(msg_ptr, &temp, sizeof(temp));
+    msg_ptr += sizeof(temp);
+  }
+
+  memcpy(msg_ptr, &msg.search_area_id, sizeof(msg.search_area_id));
+  boost::endian::native_to_big_inplace(*reinterpret_cast<decltype(msg.search_area_id)*>(msg_ptr));
+  msg_ptr += sizeof(msg.search_area_id);
+
+  memcpy(msg_ptr, &msg.plots_count, sizeof(msg.plots_count));
+  boost::endian::native_to_big_inplace(*reinterpret_cast<decltype(msg.plots_count)*>(msg_ptr));
+  msg_ptr += sizeof(msg.plots_count);
+
+  for (std::uint8_t idx = 0; idx < msg.plots_count; ++idx)
+  {
+    unsigned char plot_buf[PlotDescriptionRaw::msg_size];
+    serialize_to_network(msg.p[idx], plot_buf);
+
+    memcpy(msg_ptr, plot_buf, PlotDescriptionRaw::msg_size);
+    msg_ptr += PlotDescriptionRaw::msg_size;
+  }
+
+  return msg_ptr - buf;
+}
+
 void deserialize(const unsigned char * const buf, SearchResult_MsgRaw & ret)
 {
   assert(buf != nullptr);
@@ -217,6 +355,49 @@ void deserialize(const unsigned char * const buf, SearchResult_MsgRaw & ret)
   {
     PlotDescriptionRaw raw_msg;
     deserialize(msg_ptr, raw_msg);
+    msg_ptr += PlotDescriptionRaw::msg_size;
+
+    ret.p.emplace_back(std::move(raw_msg));
+  }
+}
+
+void deserialize_from_network(const unsigned char * const buf, SearchResult_MsgRaw &ret)
+{
+  assert(buf != nullptr);
+
+  const unsigned char* msg_ptr = buf;
+
+  memcpy(&ret.transfer_time[0], msg_ptr, sizeof(ret.transfer_time));
+  if (boost::endian::order::native == boost::endian::order::little)
+    std::reverse(&ret.transfer_time[0], &ret.transfer_time[sizeof(ret.transfer_time)]);
+  msg_ptr += sizeof(ret.transfer_time);
+
+  memcpy(&ret.process_time[0], msg_ptr, sizeof(ret.process_time));
+  if (boost::endian::order::native == boost::endian::order::little)
+    std::reverse(&ret.process_time[0], &ret.process_time[sizeof(ret.process_time)]);
+  msg_ptr += sizeof(ret.process_time);
+
+  memcpy(&ret.polarization_type, msg_ptr, sizeof(ret.polarization_type));
+  boost::endian::big_to_native_inplace(ret.polarization_type);
+  msg_ptr += sizeof(ret.polarization_type);
+
+  memcpy(&ret.signal_amp[0], msg_ptr, sizeof(ret.signal_amp));
+  for (std::size_t idx = 0; idx < sizeof(ret.signal_amp) / sizeof(ret.signal_amp[0]); ++idx)
+      boost::endian::big_to_native_inplace(ret.signal_amp[idx]);
+  msg_ptr += sizeof(ret.signal_amp);
+
+  memcpy(&ret.search_area_id, msg_ptr, sizeof(ret.search_area_id));
+  boost::endian::big_to_native_inplace(ret.search_area_id);
+  msg_ptr += sizeof(ret.search_area_id);
+
+  memcpy(&ret.plots_count, msg_ptr, sizeof(ret.plots_count));
+  boost::endian::big_to_native_inplace(ret.plots_count);
+  msg_ptr += sizeof(ret.plots_count);
+
+  for (std::uint8_t idx = 0; idx < ret.plots_count; ++idx)
+  {
+    PlotDescriptionRaw raw_msg;
+    deserialize_from_network(msg_ptr, raw_msg);
     msg_ptr += PlotDescriptionRaw::msg_size;
 
     ret.p.emplace_back(std::move(raw_msg));
