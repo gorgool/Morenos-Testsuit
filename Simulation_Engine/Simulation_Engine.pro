@@ -1,6 +1,6 @@
 TEMPLATE = app
 TARGET = morenos_imitator
-CONFIG += c++14 console
+CONFIG += c++14
 
 INCLUDEPATH += ../Packet_Manager ../Config_Manager ../Exceptions
 

@@ -178,8 +178,10 @@ void PlotPositionScene::drawForeground(QPainter *p, const QRectF &rect)
         return;
 
     QRectF scene_size(rect);
-    scene_size.setWidth(scene_size.width() - margin_ * 2);
-    scene_size.setHeight(scene_size.height() - margin_ * 2);
+    const int horizontal_margin = margin_ * 3;
+    const int vertical_margin = margin_ * 2;
+    scene_size.setWidth(scene_size.width() - horizontal_margin);
+    scene_size.setHeight(scene_size.height() - vertical_margin);
 
     const double marker_size = 8;
 
@@ -206,8 +208,8 @@ void PlotPositionScene::drawForeground(QPainter *p, const QRectF &rect)
             auto target_end = transform_coords(item.u, params.range_max,
                                                  QRectF(0, 0, scene_size.width(), scene_size.height() - bottom_offset_));
 
-            p->drawLine(target_begin.x + margin_, target_begin.y + 2*margin_,
-                        target_end.x + margin_, target_end.y + 2*margin_);
+            p->drawLine(target_begin.x + horizontal_margin / 2, target_begin.y + vertical_margin,
+                        target_end.x + horizontal_margin / 2, target_end.y + vertical_margin);
 
         }
         else
@@ -218,7 +220,7 @@ void PlotPositionScene::drawForeground(QPainter *p, const QRectF &rect)
             auto target_point = transform_coords(item.u, item.r,
                                                  QRectF(0, 0, scene_size.width(), scene_size.height() - bottom_offset_));
 
-            p->drawEllipse(target_point.x + margin_ - marker_size/2, target_point.y + 2*margin_ - marker_size/2, marker_size, marker_size);
+            p->drawEllipse(target_point.x + horizontal_margin / 2 - marker_size/2, target_point.y + vertical_margin - marker_size/2, marker_size, marker_size);
         }
     }
 }

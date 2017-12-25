@@ -362,7 +362,7 @@ double ConfigManager::get_value<double>(const Settings settings, const char* key
 {
   if (key != nullptr)
   {
-    if (settings[key].IsNumber() && settings.HasMember(key))
+    if (settings.HasMember(key) && settings[key].IsNumber())
       return settings[key].GetDouble();
     else
       throw ConfigException("Configuration Manager: Parse error.");

@@ -27,7 +27,7 @@ PacketSender::~PacketSender()
 
 void PacketSender::send_packet(const SearchResult_MsgRaw& msg)
 {
-    auto size = serialize(msg, &data[sizeof(EthernetHeader) + sizeof(SystemHeader) + sizeof(MessageHeader)]);
+    auto size = serialize_to_network(msg, &data[sizeof(EthernetHeader) + sizeof(SystemHeader) + sizeof(MessageHeader)]);
 
 	eth_header.type = size + sizeof(EthernetHeader) + sizeof(SystemHeader) + sizeof(MessageHeader);
 	memcpy(&data[0], &eth_header, sizeof(EthernetHeader));
@@ -98,7 +98,7 @@ int PacketReceiver::read_packet(SearchResult_MsgRaw & msg)
     if ( (*(const std::uint8_t*)(ptr + 1)) != 1)
       throw std::runtime_error("Wrong packet format: message id not 1.");
 
-    deserialize(&data[sizeof(EthernetHeader) + sizeof(SystemHeader) + sizeof(MessageHeader)], msg);
+    deserialize_from_network(&data[sizeof(EthernetHeader) + sizeof(SystemHeader) + sizeof(MessageHeader)], msg);
 
     return ret;
 }
